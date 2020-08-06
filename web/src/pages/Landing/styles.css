@@ -70,10 +70,12 @@
 
 .buttons-container a.study:hover {
     background: var(--color-primary-light);
+    transition: 3s;
 }
 
 .buttons-container a.give-classes:hover {
     background: var(--color-secundary-dark);    
+    transition: 3s;
 }
 
 .buttons-container a img {
