@@ -3,11 +3,9 @@
     <img src=".github/landing.svg" />
 </p>
 <h2>
-    Proffy, a maior plataforma de ensino que você não conhece. 
+    Proffy, professores e estudantes sempre conectados!
     <br>
-    Inscreva-se já!
-    <br>
-    ps: Correção de small bugs em andamento.
+    Correção de small bugs em andamento e arquivo README.md em breve.
 </h2>
 
 

@@ -25,6 +25,7 @@ function Favorites(){
           loadFavorites();
         }, [favoritesTeachers])
     )
+    
 
     return(
         <View style={styles.container}>
@@ -40,7 +41,7 @@ function Favorites(){
                         <TeacherItem 
                             key={teacher.id}
                             teacher={teacher}
-                            favorited={favoritesTeachers ? true : false} 
+                            favorited 
                         />
                     )
                 )}

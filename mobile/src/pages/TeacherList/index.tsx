@@ -39,14 +39,22 @@ function TeacherList(){
           loadFavorites();
         }, [favoritesTeachers])
     )
+    
+
+    useFocusEffect(
+        React.useCallback(() => {
+          loadFavorites();
+        }, [])
+    )
 
     function handleToggleFiltersVisible(){
         setIsFiltersVisible(!isFiltersVisible);
     }
 
     async function handleFiltersSubmit(){
-       
-        loadFavorites();
+
+        try{
+            loadFavorites();
 
         const response = await api.get('classes', {
             params: {
@@ -57,6 +65,11 @@ function TeacherList(){
         })
         setIsFiltersVisible(false);
         setTeachers(response.data);
+
+        }        
+        catch(err){
+            console.log(err);
+        }
     }
 
     return(

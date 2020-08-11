@@ -103,11 +103,12 @@ function TeacherForm() {
                         value={subject} 
                         onChange={e => setSubject(e.target.value)}
                         options={[
-                            { value: 'Artes', label: 'Artes' },
-                            { value: 'Biologia', label: 'Biologia' },
-                            { value: 'História', label: 'História' },
-                            { value: 'Matemática', label: 'Matemática' },
-                            { value: 'Física', label: 'Física' },
+                            { value: 'Assembly', label: 'Assembly' },
+                            { value: 'C', label: 'C' },
+                            { value: 'C++', label: 'C++' },
+                            { value: 'Java', label: 'Java' },
+                            { value: 'Python', label: 'Python' },
+                            { value: 'JavaScript', label: 'JavaScript' },
                         ]}
                         />
                         

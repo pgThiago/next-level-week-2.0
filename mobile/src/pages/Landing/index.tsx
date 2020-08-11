@@ -23,7 +23,7 @@ function Landing(){
         api.get('connections').then(response => {
             const { total } = response.data;
             setTotalConnections(total);
-        })
+        }).catch(err => { console.log(err) })
     }, []);
 
     function handleNavigateToStudyPage(){
