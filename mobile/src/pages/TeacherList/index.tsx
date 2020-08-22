@@ -38,14 +38,7 @@ function TeacherList(){
         React.useCallback(() => {
           loadFavorites();
         }, [favoritesTeachers])
-    )
-    
-
-    useFocusEffect(
-        React.useCallback(() => {
-          loadFavorites();
-        }, [])
-    )
+    )   
 
     function handleToggleFiltersVisible(){
         setIsFiltersVisible(!isFiltersVisible);
@@ -56,15 +49,15 @@ function TeacherList(){
         try{
             loadFavorites();
 
-        const response = await api.get('classes', {
-            params: {
-                subject,
-                week_day,
-                time,
-            }
-        })
-        setIsFiltersVisible(false);
-        setTeachers(response.data);
+            const response = await api.get('classes', {
+                params: {
+                    subject,
+                    week_day,
+                    time,
+                }
+            })
+            setIsFiltersVisible(false);
+            setTeachers(response.data);
 
         }        
         catch(err){
