@@ -34,7 +34,7 @@ This project was developed with the following technologies:
 
 ## 💻 Project
 
-Proffy is an online platform to help students to find teachers online.
+Proffy is an online platform to help students find teachers online.
 
 ## 🔖 Layout
 
