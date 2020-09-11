@@ -7,6 +7,26 @@
     margin-bottom: 6.4rem;
 }
 
+.teacher-form-header{
+    position: absolute;
+    top: 10%;
+    right: 10%;
+}
+
+.log-out {
+    font-size: 20px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 20px;
+}
+
+.home {
+    font-size: 20px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 20px;
+}
+
 #page-teacher-form main {
     background: var(--color-box-base);
     width: 100%;

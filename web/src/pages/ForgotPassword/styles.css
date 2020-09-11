@@ -1,0 +1,66 @@
+.forgot-password-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: var(--color-primary);
+}
+
+.forgot-password-container  header{
+    width: 390px;
+    height: 250px;
+    margin-top: 0px;
+}
+
+header .page-header strong:hover {
+    color: var(--color-secundary-dark)
+}
+
+.form-forgot-password-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+} 
+
+.form-forgot-password-container input[type='text'],  input[type='email'], input[type='password']{
+
+    width: 352px;
+    height: 60px;
+  
+    /* Shapes / 02 */
+    
+    background: #FAFAFC;
+    /* Back / Lines in white */
+    
+    border: 1px solid #E6E6F0;
+    box-sizing: border-box;
+    border-radius: 8px 8px 0px 0px;
+
+    padding: 20px;
+    margin-bottom: 5px;
+    font-size: 16px;
+
+}
+
+.form-forgot-password-container button[type='submit'] {
+
+    width: 352px;
+    height: 56px;
+
+    background: #DCDCE6;
+    border-radius: 8px;
+
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    background: var(--color-primary);
+
+    margin-top: 30px;
+}
+   
+.form-forgot-password-container button[type='submit']:hover {
+    color: #F0F0F7;
+    background: var(--color-secundary-dark);
+}

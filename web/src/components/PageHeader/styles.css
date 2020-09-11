@@ -27,6 +27,7 @@
     height: 1.6rem;
     position: fixed;
     right: 10%;
+    top: 5%;
 }
 .page-header .top-bar-container > img:hover {
     width: 100px;
@@ -37,6 +38,8 @@
 
 .page-header .top-bar-container #back-icon {
     position: fixed;
+    left: 10%;
+    top: 5%;
 }
 
 

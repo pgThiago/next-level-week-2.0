@@ -8,6 +8,7 @@ import TextArea from '../../components/TextArea';
 import Select from '../../components/Select';
 import warningIcon from '../../assets/images/icons/warning.svg';
 import api from '../../services/api';
+import { Link } from 'react-router-dom';
 
 function TeacherForm() {
 
@@ -18,6 +19,8 @@ function TeacherForm() {
     
     const [ subject, setSubject ] = useState('');
     const [ cost, setCost ] = useState('');
+
+    const token = localStorage.getItem('token');
 
     const [ scheduleItems, setScheduleItems ] = useState([
         { week_day: 0, from: '', to: '' }
@@ -50,6 +53,10 @@ function TeacherForm() {
             subject, 
             cost: Number(cost), 
             schedule: scheduleItems
+        },{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         }).then(() => alert('Enviado'))
     }
 
@@ -59,6 +66,10 @@ function TeacherForm() {
                 title="Que incrível que você quer dar aulas."
                 description="O primeiro passo é preencher esse formulário de inscrição"
             />
+            <header className="teacher-form-header">
+                <Link to="/landing" className="home">Home</Link>
+                <Link to="/" className="log-out">Sair</Link>
+            </header>
             <main>
                 <form onSubmit={handleCreateClass}>
                     <fieldset>

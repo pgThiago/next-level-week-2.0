@@ -15,17 +15,23 @@ import api from '../../services/api';
 
 function Landing(){
 
+    const token = localStorage.getItem('token');
+
     const [ totalConnections, setTotalConnections ] = useState(0);
 
     useEffect(() => {
-        api.get('connections').then(response => {
+        api.get('connections', { headers: { 'Authorization': `Bearer ${token}` } }).then(response => {
             const { total } = response.data;
             setTotalConnections(total);
         })
-    }, []);
+    }, [token]);
 
     return (
         <div id="page-landing">
+            <header className="landing-header">
+                <Link to="/landing" className="home">Home</Link>
+                <Link to="/" className="log-out">Sair</Link>
+            </header>
             <div id="page-landing-content" className="container">
                 <div className="logo-container">
                     <img src={logoImg} alt="Proffy"/>

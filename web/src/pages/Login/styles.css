@@ -1,0 +1,162 @@
+
+.login-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary);
+}
+
+.login-container h1 {
+    width: 198px;
+    height: 36px;
+    
+    margin-bottom: 0;
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 36px;
+    /* identical to box height, or 100% */
+
+
+    /* Texts / Títulos */
+    cursor: pointer;
+
+    color: #32264D;
+}
+
+.login-container h1:hover {
+    color: var(--color-secundary-dark)
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container input[type='email'], input[type='current-password'] {
+    width: 352px;
+    height: 60px;
+  
+    /* Shapes / 02 */
+    
+    background: #FAFAFC;
+    /* Back / Lines in white */
+    
+    border: 1px solid #E6E6F0;
+    box-sizing: border-box;
+    border-radius: 8px 8px 0px 0px;
+
+    padding: 20px;
+    margin-bottom: 10px;
+    font-size: 16px;
+
+}
+
+.form-container .forgot-password-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.form-container .forgot-password-box p {
+    font-size: 16px;
+}
+
+.form-container .forgot-password-box .forgot-button{
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    background: var(--color-primary);
+    border-radius: 10px;
+    width: 190px;
+    height: 40px;
+}
+.form-container .forgot-password-box .forgot-button:hover {
+    color: #F0F0F7;
+    background: var(--color-secundary-dark)
+}
+
+.form-container button[type='submit'] {
+
+    width: 352px;
+    height: 56px;
+
+    /* Shapes / Disabled */
+
+    background: #DCDCE6;
+    border-radius: 8px;
+
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    background: var(--color-primary);
+}
+
+.form-container button[type='submit']:hover {
+    color: #F0F0F7;
+    background: var(--color-secundary-dark);
+}
+
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 7%;
+}
+
+.login-footer {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 26%;
+    /*background: indigo;*/
+}
+
+.login-footer .box1 {
+    display: flex;
+    align-self: flex-start;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.login-footer .box1 p {
+  font-size: 16px;
+  margin-left: 0px;
+}
+
+.login-footer .box1 button {
+    font-size: 16px;
+    margin-left: -5px;
+    height: 30px;
+
+    /* Shapes / Disabled */
+
+    background: #DCDCE6;
+    border-radius: 8px;
+
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    background: var(--color-primary);
+}
+
+.login-footer .box1 button:hover {
+    color: #F0F0F7;
+    background: var(--color-secundary-dark)
+}
+
+.login-footer p {
+    font-size: 16px;
+    margin-left: 75px;
+}
+
