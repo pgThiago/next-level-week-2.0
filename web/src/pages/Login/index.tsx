@@ -11,12 +11,11 @@ function Login(){
    
     const [ email, setEmail ] = useState('');
     const [ senha, setSenha ] = useState('');
- 
-    const token = localStorage.getItem('token');
-    const id = localStorage.getItem('id');
+
 
     useEffect(() => {
         api.get('/logout');
+        localStorage.clear();
     }, []);
 
     async function handleSubmit(event: any){
@@ -24,27 +23,33 @@ function Login(){
         event.preventDefault();
 
         try{
+
            
-            const responseLogin = await api.post('/login', {
+            const loginInfo = await api.post('/login', {
                 email: email,
                 password: senha
-            },{
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
             } 
             )
-            if (responseLogin.data.auth === true)
-                history.push('/profile');
-            else{
-                history.push('/');
-                alert('Incorret email or password. Try again.')
+
+            const { id, auth, token } = loginInfo.data;
+
+            const userDatasToKeepLogged = {
+                id,
+                token,
+                auth
             }
+
+            localStorage.setItem('user', JSON.stringify(userDatasToKeepLogged));
+
+            if(auth)
+                history.push('/landing');    
+            else
+                alert('Try again!')    
+        
         }
         catch(error){
-            history.push('/signup')
+            alert('Incorrect email or password');
         }
-        
         
     }
 

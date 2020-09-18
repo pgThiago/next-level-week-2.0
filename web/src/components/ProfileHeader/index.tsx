@@ -19,7 +19,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = (props) => {
         <header className="profile-header">
                 
             <div className="profile-top-bar-container">
-                <Link to="/">
+                <Link to="/landing">
                     <img id="back-icon" src={backIcon} alt="Voltar"/>
                 </Link>
                 <img id="logo-img" src={logoImg} alt="Proffy"/>

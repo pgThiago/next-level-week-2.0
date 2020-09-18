@@ -16,11 +16,11 @@ function Routes(){
         <BrowserRouter>
         
             <Route path="/" exact component={Login}/>
+            <Route path="/landing" component={Landing}/>
+            <Route path="/profile" component={TeacherProfile}/>
             <Route path="/signup" component={Cadastro}/>
             <Route path="/forgotpass" component={ForgotPassword}/>
             <Route path="/newpassword" component={NewPassword}/>
-            <Route path="/profile" component={TeacherProfile}/>
-            <Route path="/landing" component={Landing}/>
             <Route path="/study" component={TeacherList}/>
             <Route path="/give-classes" component={TeacherForm}/>
 

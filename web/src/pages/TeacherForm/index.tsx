@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 
 // My imports
 import './styles.css';
@@ -8,9 +8,11 @@ import TextArea from '../../components/TextArea';
 import Select from '../../components/Select';
 import warningIcon from '../../assets/images/icons/warning.svg';
 import api from '../../services/api';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function TeacherForm() {
+
+    const history = useHistory();
 
     const [ name, setName ] = useState('');
     const [ avatar, setAvatar ] = useState('');
@@ -20,12 +22,34 @@ function TeacherForm() {
     const [ subject, setSubject ] = useState('');
     const [ cost, setCost ] = useState('');
 
-    const token = localStorage.getItem('token');
-
     const [ scheduleItems, setScheduleItems ] = useState([
         { week_day: 0, from: '', to: '' }
     ]);
 
+    const [ id, setId ] = useState(null);
+    const [ token, setToken ] = useState('');
+    const [ auth, setAuth ] = useState(false);
+
+    useEffect(() => {
+        try{
+            const user = localStorage.getItem('user');
+            const userString = `${user}`
+            const userInformation = JSON.parse(userString);
+            const { id, token, auth } = userInformation;
+    
+            setId(id);
+            setToken(token);
+            setAuth(auth);
+    
+            if(!auth)
+                history.push('/');
+        }
+        catch(error){
+            history.push('/');
+        }
+    }, []);
+
+    
     function addNewScheduleItem(){
         setScheduleItems([
             ...scheduleItems,
@@ -43,21 +67,40 @@ function TeacherForm() {
         setScheduleItems(updatedScheduleItems);
     }
 
-    function handleCreateClass(e: FormEvent){
-        e.preventDefault();
-        api.post('classes', {
-            name, 
-            avatar, 
-            whatsapp, 
-            bio, 
-            subject, 
-            cost: Number(cost), 
-            schedule: scheduleItems
-        },{
+    async function handleCreateClass(e: FormEvent){
+        
+        const userInfo = await api.get('/profile', {
+            params: {
+                id
+            },                  
             headers: {
                 'Authorization': `Bearer ${token}`
             }
-        }).then(() => alert('Enviado'))
+        });
+        
+        if(userInfo.data.length === 0){
+            e.preventDefault();
+            await api.post('classes', {
+                name, 
+                avatar, 
+                whatsapp, 
+                bio, 
+                subject, 
+                cost: Number(cost), 
+                schedule: scheduleItems
+            },{
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                params: {
+                    id
+                }
+            }).then(() => alert('Enviado'))
+        }
+        else{
+            alert('Não é possível cadastrar-se mais de uma vez.');
+            history.push('/profile');
+        }
     }
 
     return (
@@ -141,7 +184,7 @@ function TeacherForm() {
                         {scheduleItems.map((scheduleItem, index) => (
                         <div key={index} className="schedule-item">
                             <Select
-                                name="week_Day"
+                                name="week_day"
                                 label="Dia da semana"
                                 value={scheduleItem.week_day}
                                 onChange={e => setScheduleItemValue(index, 'week_day', e.target.value)}

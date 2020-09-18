@@ -17,6 +17,7 @@ function Cadastro(){
 
     async function handleSubmit(event: any){
         event.preventDefault();
+       
         try{
             const response = await api.post('/signup', {
                 account_name,
@@ -24,12 +25,19 @@ function Cadastro(){
                 email,
                 password
             })
-            const { identiUser, token } = response.data;
-            console.log(response.data);
-            localStorage.setItem('id', identiUser);
-            localStorage.setItem('token', token);
-            history.push('/',  response.data);
+            const { identiUser, token, auth } = response.data;
+
+            const userDatasToKeepLogged = {
+                auth,
+                id: identiUser,
+                token,
+            }
+
+            localStorage.setItem('user', JSON.stringify(userDatasToKeepLogged));
+            
+            history.push('/landing');
         }
+        
         catch(error){
             history.push('/signup')
         }

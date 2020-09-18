@@ -114,12 +114,12 @@
 }
 
 .login-footer {
+    max-width: 352px;
     margin-top: 40px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     width: 26%;
-    /*background: indigo;*/
 }
 
 .login-footer .box1 {

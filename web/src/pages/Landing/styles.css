@@ -20,14 +20,27 @@
     right: 10%;
 }
 
-.log-out {
+.landing-header button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.home {
     font-size: 20px;
     color: #FFF;
     text-decoration: none;
     padding: 20px;
 }
 
-.home {
+.profile {
+    font-size: 20px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 20px;
+}
+
+.log-out {
     font-size: 20px;
     color: #FFF;
     text-decoration: none;
@@ -82,10 +95,14 @@
 
 .buttons-container a.study {
     background: var(--color-primary-lighter);
+    border: none;
+    cursor: pointer;
 }
 
 .buttons-container a.give-classes {
     background: var(--color-secundary);    
+    border: none;
+    cursor: pointer;
 }
 
 .buttons-container a.study:hover {
@@ -156,61 +173,3 @@
         grid-area: total;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

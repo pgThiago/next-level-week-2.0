@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 
 // My imports
 import PageHeader from '../../components/PageHeader';
@@ -8,15 +8,43 @@ import Select from '../../components/Select';
 
 import './styles.css';
 import api from '../../services/api';
-
+import { Link, useHistory } from 'react-router-dom';
 
 function TeacherList() {
+
+    const history = useHistory();
 
     const [ teachers, setTeachers ] = useState([])
 
     const [ subject, setSubject ] = useState('');
     const [ week_day, setWeekDay ] = useState('');
     const [ time, setTime ] = useState('');
+
+    const [ id, setId ] = useState(null);
+    const [ token, setToken ] = useState('');
+    const [ auth, setAuth ] = useState(false);
+
+    useEffect(() => {
+        try{
+            const user = localStorage.getItem('user');
+            const userString = `${user}`
+            const userInformation = JSON.parse(userString);
+            const { id, token, auth } = userInformation;
+    
+            setId(id);
+            setToken(token);
+            setAuth(auth);
+            console.log(auth);
+    
+            if(!auth)
+                history.push('/');
+        }
+        catch(error){
+            history.push('/');
+        }
+    }, []);
+
+   
 
     async function searchTeachers(e: FormEvent){
         e.preventDefault();
@@ -26,6 +54,9 @@ function TeacherList() {
                 subject,
                 week_day,
                 time
+            },
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
         })
 
@@ -36,6 +67,11 @@ function TeacherList() {
 
         <div id="page-teacher-list" className="container">
             <PageHeader title="Estes são os professores disponíveis">
+            <header className="landing-header">
+                <Link to="/landing" className="home">Home</Link>
+                <Link to="/profile" className="profile">Meu perfil</Link>
+                <Link to="/" className="log-out">Sair</Link>
+            </header>
 
                 <form id="search-teachers" onSubmit={searchTeachers}>
 

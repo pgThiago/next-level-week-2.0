@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 // My imports
 import logoImg from '../../assets/images/logo.svg';
@@ -15,21 +15,35 @@ import api from '../../services/api';
 
 function Landing(){
 
-    const token = localStorage.getItem('token');
+    const history = useHistory();
 
     const [ totalConnections, setTotalConnections ] = useState(0);
+    const [ token, setToken ] = useState('');
 
     useEffect(() => {
-        api.get('connections', { headers: { 'Authorization': `Bearer ${token}` } }).then(response => {
-            const { total } = response.data;
-            setTotalConnections(total);
-        })
+        try{
+            const user = localStorage.getItem('user');
+            const userString = `${user}`
+            const userInformation = JSON.parse(userString);
+            const { token, auth } = userInformation;
+            setToken(token);
+            if(!auth)
+                history.push('/');
+            
+            api.get('connections', { headers: { 'Authorization': `Bearer ${token}` } }).then(response => {
+                const { total } = response.data;
+                setTotalConnections(total);
+            })
+        }
+        catch(error){
+            history.push('/');        }
+        
     }, [token]);
 
     return (
         <div id="page-landing">
             <header className="landing-header">
-                <Link to="/landing" className="home">Home</Link>
+                <Link to="/profile" className="profile">Meu perfil</Link>
                 <Link to="/" className="log-out">Sair</Link>
             </header>
             <div id="page-landing-content" className="container">

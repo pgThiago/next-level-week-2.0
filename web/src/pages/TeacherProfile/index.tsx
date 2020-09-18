@@ -1,5 +1,8 @@
 import React, { useState, FormEvent, useEffect } from 'react';
 
+import { Link, useHistory } from 'react-router-dom';
+
+
 // My imports
 import './styles.css';
 import ProfileHeader from '../../components/ProfileHeader';
@@ -9,20 +12,54 @@ import Select from '../../components/Select';
 import warningIcon from '../../assets/images/icons/warning.svg';
 import api from '../../services/api';
 
-function TeacherProfile() {
+import convertMinutesToHours from '../../utils/convertMinutesToHours';
+import getMinutes from '../../utils/getMinutes';
 
+function TeacherProfile({ location } : any) {
+
+    const history = useHistory();
+
+    const [ avatar, setAvatar ] = useState('');
     const [ name, setName ] = useState('');
     const [ last_name, setLastName ] = useState('');
     const [ email, setEmail ] = useState('');
     const [ whatsapp, setWhatsapp ] = useState('');
     const [ bio, setBio ] = useState('');
+  
+    const [ week_day, setWeekDay ] = useState('');
+    const [ from, setFrom ] = useState('');
+    const [ to, setTo ] = useState('');
     
     const [ subject, setSubject ] = useState('');
     const [ cost, setCost ] = useState('');
 
     const [ scheduleItems, setScheduleItems ] = useState([
-        { week_day: 0, from: '', to: '' }
+        { week_day: 0, from: 0, to: 0 }
     ]);
+
+    const [ id, setId ] = useState(null);
+    const [ token, setToken ] = useState('');
+    const [ auth, setAuth ] = useState(false);
+
+    useEffect(() => {
+        try{
+            const user = localStorage.getItem('user');
+            const userString = `${user}`
+            const userInformation = JSON.parse(userString);
+            const { id, token, auth } = userInformation;
+    
+            setId(id);
+            setToken(token);
+            setAuth(auth);
+            console.log(auth);
+    
+            if(!auth)
+                history.push('/');
+        }
+        catch(error){
+            history.push('/');
+        }
+    }, []);
 
     function addNewScheduleItem(){
         setScheduleItems([
@@ -41,6 +78,7 @@ function TeacherProfile() {
         setScheduleItems(updatedScheduleItems);
     }
 
+
     function handleCreateClass(e: FormEvent){
         e.preventDefault();
         api.post('classes', {
@@ -55,26 +93,104 @@ function TeacherProfile() {
     }
 
     // My functions ( from the challenges - 2.0 version )
+
     useEffect(() => {
-        function getProffyDatas(){
-            /* try{
-                //const response = await api.get(''
+    
+        async function getProffyDatas(){
+            try{
+
+                const userInfo = await api.get('/profile', {
+                    params: {
+                        id
+                    },                  
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if(userInfo.data.length === 0){
+                    alert('Você precisa se cadastrar primeiro');
+                    history.push('/give-classes');
+                }
+                console.log(id);
+                const { avatar, name, last_name, email, whatsapp, bio, week_day, subject, cost, from, to } = userInfo.data[0];
+               
+                setAvatar(avatar);
+                setName(name);
+                setLastName(last_name);
+                setEmail(email);
+                setWhatsapp(whatsapp);
+                setBio(bio);
+                setSubject(subject);
+                setCost(cost);
+                
+                let fromHours = convertMinutesToHours(from);
+                let fromMinutes = getMinutes(from);
+                let fromTime = `${fromHours}:${fromMinutes}`;
+
+                if(fromTime.length < 5){
+                   
+                    let fromTimeSplit = fromTime.split(':');
+                   
+                    if(fromTimeSplit[0].length === 1 && fromTimeSplit[1].length === 1){
+                        fromTime = `0${fromHours}:${fromMinutes}0`;
+                    }
+                    
+                    if(fromTimeSplit[0].length === 2 && fromTimeSplit[1].length === 1){
+                        fromTime = `${fromHours}:${fromMinutes}0`;
+                        console.log(fromTime)
+                    }
+
+                    if(fromTimeSplit[0].length === 1 && fromTimeSplit[1].length === 2){
+                        fromTime = `0${fromHours}:${fromMinutes}`;
+                    }
+                   
+
+                }
+
+
+                let toHours = convertMinutesToHours(to);
+                let toMinutes = getMinutes(to);
+                let toTime = `${toHours}:${toMinutes}`;
+
+                if(toTime.length < 5){
+                   
+                    let toTimeSplit = toTime.split(':');
+                    
+                    if(toTimeSplit[0].length === 1 && toTimeSplit[1].length === 1)
+                        toTime = `0${toHours}:${toMinutes}0`;
+                    
+                    if(toTimeSplit[0].length === 2 && toTimeSplit[1].length === 1)
+                        toTime = `${toHours}:${toMinutes}0`;
+
+                    if(toTimeSplit[0].length === 1 && toTimeSplit[1].length === 2)
+                        toTime = `0${toHours}:${toMinutes}`;
+
+                }
+                
+
+                setWeekDay(week_day);
+                setFrom(fromTime);
+                setTo(toTime);
+                
             }
             catch(error){
-    
-            } */
+                console.log(error);
+            }
         }
         getProffyDatas();
-    }, []);
-
+    }, [id]);
 
     return (
         <div id="page-teacher-profile" className="container" >
             <ProfileHeader
-                link="https://avatars0.githubusercontent.com/u/48173784?s=460&u=470bec2e5deab6f808308e7230c1c52b59579c41&v=4"
-                name="Thiago Silva"
-                subject="JavaScript"
+                link={avatar}
+                name={name}
+                subject={subject}
             />
+            <header className="landing-header">
+                <Link to="landing" className="home">Home</Link>
+                <Link to="/" className="log-out">Sair</Link>
+            </header>
             <main>
                 <form onSubmit={handleCreateClass}>
                     <fieldset>
@@ -82,7 +198,7 @@ function TeacherProfile() {
 
                         <Input 
                         name="name" 
-                        label="Nome completo" 
+                        label="Nome" 
                         value={name}
                         onChange={(e => setName(e.target.value))}
                         />
@@ -143,6 +259,7 @@ function TeacherProfile() {
                         value={cost}
                         onChange={e => setCost(e.target.value)}
                         />
+
                     </fieldset>
 
                     <fieldset>
@@ -154,9 +271,9 @@ function TeacherProfile() {
                         {scheduleItems.map((scheduleItem, index) => (
                         <div key={index} className="schedule-item">
                             <Select
-                                name="week_Day"
+                                name="week_day"
                                 label="Dia da semana"
-                                value={scheduleItem.week_day}
+                                value={week_day}
                                 onChange={e => setScheduleItemValue(index, 'week_day', e.target.value)}
                                 options={[
                                     { value: '0', label: 'Domingo' },
@@ -172,8 +289,8 @@ function TeacherProfile() {
                              name="from"
                              label="Das"
                              type="time"
-                             value={scheduleItem.from} 
-                            onChange={e => setScheduleItemValue(index, 'from', e.target.value)}
+                             value={from}
+                             onChange={e => setScheduleItemValue(index, 'from', e.target.value)}
 
                              />
 
@@ -182,8 +299,8 @@ function TeacherProfile() {
                              name="to"
                              label="Até"
                              type="time"
-                             value={scheduleItem.to} 
-                            onChange={e => setScheduleItemValue(index, 'to', e.target.value)}
+                             value={to} 
+                             onChange={e => setScheduleItemValue(index, 'to', e.target.value)}
 
                              />
                         </div>

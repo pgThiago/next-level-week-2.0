@@ -16,7 +16,7 @@ function NewPassword(props: any){
     useEffect(() => {
         const { email } = props.location.state;
         setEmail(email);
-    }, []);
+    }, [props.location.state]);
 
     const  history = useHistory();
     
@@ -25,7 +25,7 @@ function NewPassword(props: any){
         
         try{
             if(senha === current_senha){
-                const response = await api.post('/reset_password', { 
+                await api.post('/reset_password', { 
                     token: token, password: senha 
                 },{
                     params: {
