@@ -5,10 +5,11 @@ module.exports = async (request, response, next) => {
     const url = request.url;
    
     const resetUrl = url.includes('reset_password');
+    const loginUrl = url.includes('login');
+    //const userUrl = url.includes('user');
 
-    if(url !== '/signup' && url !== '/forgot_password' && !resetUrl && url !== '/logout' && url !== '/login'){
+    if(url !== '/signup' && url !== '/forgot_password' && !resetUrl && url !== '/logout' && !loginUrl){
         const authHeader = request.headers.authorization;
-        console.log(authHeader);
         if(!authHeader){
             return response.status(401).send({ error: 'No token provided!' });
         }

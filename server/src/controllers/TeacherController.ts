@@ -3,9 +3,10 @@ import db from '../database/connection';
 
 export default class ClassesController {
     async index(request: Request, response: Response){ // Proffy exibindo seu perfil
-
-        const userId = request.params.id;
         
+        const { id } = request.query;
+        console.log(id);
+        try{
         // Juntar as tables user_account, users, classes, class_schedule,
         
         // Da user_account preciso do: last_name, email 
@@ -13,14 +14,28 @@ export default class ClassesController {
         // Da classes precido do: subject, cost, bio
         // Da class_schedule precido do: week_day, from, to
 
-        const proffyDatas = await db('users')
+        /* const proffyDatas = await db('users')
         .join('user_account', `users.id`, '=', `user_account.id`)
         .join('classes', `users.id`, '=', `classes.user_id`)
         .join('class_schedule', 'class_id', '=', 'classes.id')
         .select('name', 'last_name', 'email', 'whatsapp', 'bio', 'cost', 'avatar', 'subject', 'week_day', 'from', 'to')
-        .where(`users.id`, '=', `${userId}`);
+        .where(`users.id`, '=', `${id}`); */
+
+        const proffyDatas = await db('user_account')
+        .join('users', `user_account.id`, '=', `users.id`)
+        .join('classes', `users.id`, '=', `classes.user_id`)
+        .join('class_schedule', 'class_id', '=', 'classes.id')
+        .select('name', 'last_name', 'email', 'whatsapp', 'bio', 'cost', 'avatar', 'subject', 'week_day', 'from', 'to')
+        .where(`users.id`, '=', `${id}`);
+        
+        console.log('ProffyDatas: ', proffyDatas);
 
         return response.json(proffyDatas);
+        }
+        
+        catch(error){
+            console.log(error);
+        }
         
     }
 

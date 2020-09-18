@@ -18,12 +18,11 @@ function generateToken(params = {}){
 export default class ClassesController {    
 
     async index(request: Request, response: Response){
-        const { id } = request.query;
-        //const userEmail = email;
+        const { email } = request.query;
 
         try{  
             const user = await db('user_account').where({
-                id
+                email
             }).select('*');
 
             if(!user)
@@ -57,11 +56,11 @@ export default class ClassesController {
                             account_name, 
                             last_name,
                             email,
-                            password: hash
+                            password: hash,
                         });   
-                        const identiUser = user[0];
+                        const id = user[0];
                         
-                        return response.send({identiUser, account_name, last_name, email, token: generateToken({ id: user[0] }), message: 'Cadastrado'});
+                        return response.send({auth: true, id, account_name, last_name, email, token: generateToken({ id: user[0] }), message: 'Cadastrado'});
                         
                     });
                 });             
@@ -73,7 +72,7 @@ export default class ClassesController {
     async login (request: Request, response: Response){   
         
         const { email, password } = request.body;
-        console.log('Body do login: ', request.body);
+        
         try{
             const dbPassword = await db('user_account').where({
                 email: `${email}`
@@ -83,12 +82,14 @@ export default class ClassesController {
                 email: `${email}`
             }).select('id');
 
+            const id = userId[0].id;
+
             let hash = dbPassword[0].password;
 
             bcrypt.compare(password, hash, function(err, result) {
                 // result == true    
                 if(result){
-                    return response.send({ auth: true, token: generateToken( { id: userId }) });
+                    return response.send({id, auth: true, token: generateToken( { id: userId[0] }) });
                 }
 
                 return response.json({ message: 'Invalid login' });
@@ -96,8 +97,7 @@ export default class ClassesController {
             });
         }
         catch(error){
-            // return response.status(401).send({ error: 'You do not have an account yet. Sign up first.' });
-            console.log(error)        
+            return response.status(401).send({ error: 'You do not have an account yet. Sign up first.' });        
         }
     }
 
@@ -152,12 +152,6 @@ export default class ClassesController {
         const { token, password } = request.body;
         const { email } = request.query;
         const newPassword = password;
-        console.log({
-            token,
-            password,
-            email
-        })
-
         try {
 
             // Email

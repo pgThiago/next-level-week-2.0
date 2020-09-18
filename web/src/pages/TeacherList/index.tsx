@@ -36,7 +36,7 @@ function TeacherList() {
             setAuth(auth);
             console.log(auth);
     
-            if(!auth)
+            if(!auth || !token)
                 history.push('/');
         }
         catch(error){

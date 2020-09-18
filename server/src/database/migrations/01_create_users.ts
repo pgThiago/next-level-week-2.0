@@ -9,6 +9,13 @@ export async function up(knex: Knex) {
         table.string('whatsapp').notNullable();
         table.string('bio').notNullable();
 
+        table.integer('user_id')
+        .notNullable()
+        .references('id')
+        .inTable('user_account')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
+
     });
 }
 

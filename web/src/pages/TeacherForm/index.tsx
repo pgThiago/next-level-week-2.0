@@ -30,6 +30,9 @@ function TeacherForm() {
     const [ token, setToken ] = useState('');
     const [ auth, setAuth ] = useState(false);
 
+    const user = localStorage.getItem('user');
+    console.log(user);
+
     useEffect(() => {
         try{
             const user = localStorage.getItem('user');
@@ -41,7 +44,7 @@ function TeacherForm() {
             setToken(token);
             setAuth(auth);
     
-            if(!auth)
+            if(!auth || !token)
                 history.push('/');
         }
         catch(error){
@@ -95,7 +98,10 @@ function TeacherForm() {
                 params: {
                     id
                 }
-            }).then(() => alert('Enviado'))
+            }).then(() => {
+                history.push('/profile')
+            })
+            .catch((error) => console.log('Erro no TeacherForm: ', error));
         }
         else{
             alert('Não é possível cadastrar-se mais de uma vez.');

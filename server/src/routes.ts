@@ -27,7 +27,7 @@ routes.get('/user', usersController.index);
 routes.post('/forgot_password', usersController.forgotPassword);
 routes.post('/reset_password', usersController.resetPassword);
 
-routes.get('/profile/:id', teacherController.index);
+routes.get('/profile', teacherController.index);
 routes.post('/update/:id', teacherController.update);
 routes.post('/:proffyid/favorites', teacherController.setFavorites);
 routes.delete('/:proffyid/delfavorites', teacherController.delFavorites);

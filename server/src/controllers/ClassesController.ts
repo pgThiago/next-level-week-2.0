@@ -45,6 +45,8 @@ export default class ClassesController {
     }
 
     async create (request: Request, response: Response) {
+        const { id } = request.query;     
+        
         const {
             name,
             avatar,
@@ -54,19 +56,24 @@ export default class ClassesController {
             cost,
             schedule
         } = request.body;
-    
+        
         const trx = await db.transaction();
         
         try {
+            const userIdFromDataBase = await trx('user_account').where({
+                id: `${id}`
+            }).select('id');
+            
+            console.log('userIdFromDataBase: ', userIdFromDataBase[0].id);
             const insertedUsersIds = await trx('users').insert({
+                user_id: userIdFromDataBase[0].id,
                 name,
                 avatar,
                 whatsapp,
                 bio,
             });
         
-            const user_id = insertedUsersIds[0];
-        
+            const user_id = insertedUsersIds[0];        
             const insertedClssesIds = await trx('classes').insert({
                 subject,
                 cost,

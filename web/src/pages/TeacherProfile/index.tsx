@@ -15,7 +15,7 @@ import api from '../../services/api';
 import convertMinutesToHours from '../../utils/convertMinutesToHours';
 import getMinutes from '../../utils/getMinutes';
 
-function TeacherProfile({ location } : any) {
+function TeacherProfile() {
 
     const history = useHistory();
 
@@ -39,7 +39,9 @@ function TeacherProfile({ location } : any) {
 
     const [ id, setId ] = useState(null);
     const [ token, setToken ] = useState('');
-    const [ auth, setAuth ] = useState(false);
+
+    const user = localStorage.getItem('user');
+    console.log('user: ', user);
 
     useEffect(() => {
         try{
@@ -50,10 +52,8 @@ function TeacherProfile({ location } : any) {
     
             setId(id);
             setToken(token);
-            setAuth(auth);
-            console.log(auth);
     
-            if(!auth)
+            if(!auth || !token)
                 history.push('/');
         }
         catch(error){
@@ -107,12 +107,25 @@ function TeacherProfile({ location } : any) {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+                console.log(userInfo.data)
                 if(userInfo.data.length === 0){
                     alert('Você precisa se cadastrar primeiro');
                     history.push('/give-classes');
                 }
-                console.log(id);
                 const { avatar, name, last_name, email, whatsapp, bio, week_day, subject, cost, from, to } = userInfo.data[0];
+                console.log({
+                    avatar,
+                    name,
+                    last_name,
+                    email,
+                    whatsapp,
+                    bio,
+                    week_day,
+                    subject,
+                    cost,
+                    from,
+                    to
+                });
                
                 setAvatar(avatar);
                 setName(name);

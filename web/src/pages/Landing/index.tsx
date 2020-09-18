@@ -27,7 +27,7 @@ function Landing(){
             const userInformation = JSON.parse(userString);
             const { token, auth } = userInformation;
             setToken(token);
-            if(!auth)
+            if(!auth || !token)
                 history.push('/');
             
             api.get('connections', { headers: { 'Authorization': `Bearer ${token}` } }).then(response => {

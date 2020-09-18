@@ -25,11 +25,12 @@ function Cadastro(){
                 email,
                 password
             })
-            const { identiUser, token, auth } = response.data;
+
+            const { id, token, auth } = response.data;
 
             const userDatasToKeepLogged = {
                 auth,
-                id: identiUser,
+                id,
                 token,
             }
 
