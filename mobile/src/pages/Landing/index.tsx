@@ -13,11 +13,13 @@ import { useNavigation } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
 import api from '../../services/api';
 
-function Landing(){
+function Landing({ route }: any){
 
     const [ totalConnections, setTotalConnections ] = useState(0);
 
-    const navigation = useNavigation();
+    const { id, auth, token } = route.params;
+
+    const { navigate } = useNavigation();
 
     useEffect(() => {
         api.get('connections').then(response => {
@@ -27,11 +29,20 @@ function Landing(){
     }, []);
 
     function handleNavigateToStudyPage(){
-        navigation.navigate('Study');
+        navigate('Study');
+    }
+
+    function goToProfile(){
+        navigate('TeacherProfile', { id, auth, token });
     }
 
     function handleNavigateToClassesPage(){
-        navigation.navigate('GiveClasses');
+
+        navigate('GiveClasses', { id, auth, token });
+    }
+
+    function logOut(){
+        navigate('Login');
     }
     
     return(
@@ -61,11 +72,23 @@ function Landing(){
                 </RectButton>
 
             </View>
+            
+            <View style={styles.menuContainer}>
+                <RectButton onPress={goToProfile} style={[styles.buttonProfile, styles.buttonPrimary]}>
+                    <Text style={styles.profileButtonText}>Meu perfil</Text>
+                </RectButton>
+            
+                <RectButton onPress={logOut} style={[styles.buttonProfile, styles.buttonSecundary]}>
+                    <Text style={styles.logOutText}>Sair</Text>
+                </RectButton>
+            </View>
 
             <Text style={styles.totalConnections}>
                 Total de {totalConnections} conexões já realizadas {' '}
                 <Image source={heartIcon} />
             </Text>
+
+            
 
         </View>
     );

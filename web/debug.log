@@ -1753,3 +1753,4 @@
 [0918/162126.946:ERROR:crash_report_database_win.cc(469)] failed to stat report
 [0918/162126.946:ERROR:crash_report_database_win.cc(469)] failed to stat report
 [0918/162126.946:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0922/222458.030:ERROR:registration_protocol_win.cc(103)] CreateFile: O sistema não pode encontrar o arquivo especificado. (0x2)

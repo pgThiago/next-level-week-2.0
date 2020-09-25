@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { View, Image, Text } from 'react-native';
 
@@ -9,17 +9,19 @@ import backIcon from '../../assets/images/icons/back.png';
 import logoImg from '../../assets/images/logo.png';
 import { useNavigation } from '@react-navigation/native';
 
-interface PageHeaderProps {
-    title: string;
+interface ProfileHeaderProps {
+    profileImage: string;
+    name: string;
+    subject: string;
     headerRight?: ReactNode;
 }
 
-const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children }) => {
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profileImage, name, subject }) => {
 
     const { navigate } = useNavigation();
 
     function handleGoBack(){
-        navigate('Login');
+        navigate('Landing');
     }
 
     return(
@@ -32,12 +34,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
             </View>
 
             <View style={styles.header}>
-                <Text style={styles.title}>{title}</Text>
-                {headerRight}
+                <Image style={styles.profileImage} source={{ uri: profileImage }} />
+                <Text style={styles.profileName}>{name}</Text>
+                <Text style={styles.profileSubject}>{subject}</Text>
             </View>
-            {children}
         </View>
     )
 }
 
-export default PageHeader;
+export default ProfileHeader;

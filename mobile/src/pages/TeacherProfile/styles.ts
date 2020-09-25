@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 
     dataContainer: {
         backgroundColor: '#000',
-        width: '94%',
+        width: '98%',
         height: '55%',
         alignSelf: 'center',
         borderRadius: 10,
@@ -69,6 +69,18 @@ const styles = StyleSheet.create({
     },
 
     lastnameText: {
+        height: 50,
+        fontSize: 16,
+        fontFamily: 'Poppins_400Regular',
+        color: '#fff',
+        padding: 5,
+
+        borderBottomWidth: 1,
+        borderBottomColor: '#fff',
+        borderRadius: 10,
+    },
+
+    emailText: {
         height: 50,
         fontSize: 16,
         fontFamily: 'Poppins_400Regular',
@@ -196,7 +208,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center', 
         borderRadius: 10,
-        width: 340,
+        width: 355,
         height: 70,
         marginBottom: 50,
         marginTop: 7,

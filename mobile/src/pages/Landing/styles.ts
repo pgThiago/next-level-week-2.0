@@ -61,7 +61,35 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         maxWidth: 140,
         marginTop: 40,
-    }
+    },
+
+    menuContainer: {
+        flexDirection: 'row',
+        marginTop: 10,
+        justifyContent: 'space-between',
+    },
+
+    profileButtonText:{
+        fontFamily: 'Archivo_700Bold',
+        color: '#FFF',
+        fontSize: 16,
+    },
+
+    logOutText: {
+        fontFamily: 'Archivo_700Bold',
+        color: '#FFF',
+        fontSize: 16,
+    },
+
+    buttonProfile: {
+        height: 70,
+        width: '49%',
+        backgroundColor: '#333',
+        borderRadius: 8,
+        padding: 24,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     
 });
 

@@ -41,7 +41,6 @@ function TeacherProfile() {
     const [ token, setToken ] = useState('');
 
     const user = localStorage.getItem('user');
-    console.log('user: ', user);
 
     useEffect(() => {
         try{

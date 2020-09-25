@@ -209,7 +209,7 @@ function TeacherForm() {
                              label="Das"
                              type="time"
                              value={scheduleItem.from} 
-                            onChange={e => setScheduleItemValue(index, 'from', e.target.value)}
+                             onChange={e => setScheduleItemValue(index, 'from', e.target.value)}
 
                              />
 
@@ -219,7 +219,7 @@ function TeacherForm() {
                              label="Até"
                              type="time"
                              value={scheduleItem.to} 
-                            onChange={e => setScheduleItemValue(index, 'to', e.target.value)}
+                             onChange={e => setScheduleItemValue(index, 'to', e.target.value)}
 
                              />
                         </div>

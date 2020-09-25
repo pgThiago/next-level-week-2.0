@@ -9,17 +9,18 @@ import backIcon from '../../assets/images/icons/back.png';
 import logoImg from '../../assets/images/logo.png';
 import { useNavigation } from '@react-navigation/native';
 
-interface PageHeaderProps {
+interface SignupHeaderProps {
     title: string;
+    subTitle: string;
     headerRight?: ReactNode;
 }
 
-const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children }) => {
+const SignupHeader: React.FC<SignupHeaderProps> = ({ title, subTitle, headerRight }) => {
 
     const { navigate } = useNavigation();
 
     function handleGoBack(){
-        navigate('Login');
+        navigate('Landing');
     }
 
     return(
@@ -33,11 +34,11 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
 
             <View style={styles.header}>
                 <Text style={styles.title}>{title}</Text>
+                <Text style={styles.subTitle}>{subTitle}</Text>
                 {headerRight}
             </View>
-            {children}
         </View>
     )
 }
 
-export default PageHeader;
+export default SignupHeader;
