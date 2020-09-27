@@ -36,7 +36,7 @@ function ConcluirCadastro({ route }: any){
                 token,
             }
 
-            AsyncStorage.setItem('user', JSON.stringify(userDatasToKeepLogged));
+            await AsyncStorage.setItem('user', JSON.stringify(userDatasToKeepLogged));
             
             navigate('CadastroConcluido');
         }
@@ -65,6 +65,7 @@ function ConcluirCadastro({ route }: any){
                     autoFocus={true}
                     style={styles.emailText}
                     placeholder="E-mail"
+                    autoCapitalize="none"
                     value={email}
                     onChangeText={text => setEmail(text)}>
                         

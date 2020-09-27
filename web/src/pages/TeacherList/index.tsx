@@ -19,32 +19,23 @@ function TeacherList() {
     const [ subject, setSubject ] = useState('');
     const [ week_day, setWeekDay ] = useState('');
     const [ time, setTime ] = useState('');
-
-    const [ id, setId ] = useState(null);
     const [ token, setToken ] = useState('');
-    const [ auth, setAuth ] = useState(false);
 
     useEffect(() => {
         try{
             const user = localStorage.getItem('user');
             const userString = `${user}`
             const userInformation = JSON.parse(userString);
-            const { id, token, auth } = userInformation;
-    
-            setId(id);
+            const { auth, token } = userInformation;
             setToken(token);
-            setAuth(auth);
-            console.log(auth);
-    
-            if(!auth || !token)
+            if(!auth)
                 history.push('/');
         }
         catch(error){
             history.push('/');
         }
-    }, []);
+    }, [history]);
 
-   
 
     async function searchTeachers(e: FormEvent){
         e.preventDefault();

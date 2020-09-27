@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
 
 import styles from './styles';
@@ -7,23 +7,44 @@ import TeacherItem, { Teacher } from '../../components/TeacherItem';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
-function Favorites(){
+import api from '../../services/api';
+
+import { useIsFocused } from "@react-navigation/native";
+
+function Favorites({ route }: any){
 
     const [ favoritesTeachers, setFavoritesTeachers ] = useState([]);
+    const isFocused = useIsFocused();
 
-    function loadFavorites(){
+    async function loadFavorites(){
         AsyncStorage.getItem('favorites').then(response => {
             if(response){
                 const favoritedTeachers = JSON.parse(response);
                 setFavoritesTeachers(favoritedTeachers);
             }
         });
+    
+        const { id, token } = route;
+        try{
+
+            await api.post('/prof/loadFavorites', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'user': id,
+                }
+            });
+        }
+        catch(error){
+            console.log(error.response);
+        }
+
+
     }
 
     useFocusEffect(
         React.useCallback(() => {
           loadFavorites();
-        }, [favoritesTeachers])
+        }, [isFocused])
     )
     
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { ScrollView, TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
@@ -13,8 +13,13 @@ import TeacherItem, { Teacher } from '../../components/TeacherItem';
 import { Feather } from '@expo/vector-icons';
 import api from '../../services/api';
 
-function TeacherList(){
+import { useIsFocused } from "@react-navigation/native";
 
+function TeacherList({ route }: any){
+
+    const { id, auth, token } = route.params;
+
+    
     const [isFiltersVisible, setIsFiltersVisible] = useState(false);
 
     const [ teachers, setTeachers ] = useState([]);
@@ -23,12 +28,16 @@ function TeacherList(){
     const [ subject, setSubject ] = useState('');
     const [ week_day, setWeek_day ] = useState('');
     const [ time, setTime ] = useState('');
+    const isFocused = useIsFocused();
 
     function loadFavorites(){
+        
         AsyncStorage.getItem('favorites').then(response => {
             if(response){
                 const favoritedTeachers = JSON.parse(response);
-                const favoritesTeachersIds = favoritedTeachers.map((teacher: Teacher) => teacher.id)
+                const favoritesTeachersIds = favoritedTeachers.map((teacher: Teacher) => {
+                    return teacher.id;
+                })
                 setFavoritesTeachers(favoritesTeachersIds);
             }
         });
@@ -37,11 +46,19 @@ function TeacherList(){
     useFocusEffect(
         React.useCallback(() => {
           loadFavorites();
-        }, [favoritesTeachers])
+        }, [isFocused])
     )   
 
     function handleToggleFiltersVisible(){
         setIsFiltersVisible(!isFiltersVisible);
+    }
+
+    function doNotReturnYourself(resp: any){
+        const users = resp.filter((user: any) => (
+            user.id !== id
+        ))
+        
+        return users;
     }
 
     async function handleFiltersSubmit(){
@@ -54,16 +71,25 @@ function TeacherList(){
                     subject,
                     week_day,
                     time,
+                },
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-            })
+            })  
+
+            
+            const proffys = doNotReturnYourself(response.data);
+            console.log(proffys);
+            
             setIsFiltersVisible(false);
-            setTeachers(response.data);
+            setTeachers(proffys);
 
         }        
         catch(err){
-            console.log(err);
+            console.log('Deu ruim: ', err);
         }
     }
+    
 
     return(
         <View style={styles.container}>
@@ -137,6 +163,7 @@ function TeacherList(){
                     return (<TeacherItem 
                         key={teacher.id}
                         teacher={teacher}
+                        route={{ id, auth, token }}
                         favorited={favoritesTeachers.includes(teacher.id)}
                     />)
                 })}

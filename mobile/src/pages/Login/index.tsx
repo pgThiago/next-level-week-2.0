@@ -24,11 +24,36 @@ function Login(){
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     
-    useEffect(() => {
-        AsyncStorage.clear();
+    useEffect(() => {        
         setEmail('');
         setSenha('');
     }, [isFocused]);
+
+    function handleCheckBox(){
+        setToggleCheckBox(!toggleCheckBox)
+    }
+    
+    useEffect(() => {
+        async function randomFunction(){
+            try{
+                const user = await AsyncStorage.getItem('user');
+                
+                const userAsObject = JSON.parse(`${user}`);
+                const { id, auth, token } = userAsObject;
+
+                if(auth){
+                    navigate('Landing', { id, auth, token });
+                }
+                else{
+                    navigate('Login');
+                }
+            }
+            catch(error){
+                navigate('Login');
+            }
+        }
+        randomFunction();
+    }, []);
 
     
     async function handleEnter(){
@@ -45,21 +70,36 @@ function Login(){
             const userDatasToKeepLogged = {
                 id,
                 token,
-                auth
+                auth,
+                email,
+                password: senha
             }
 
-            AsyncStorage.setItem('user', JSON.stringify(userDatasToKeepLogged));
+            const userDatasToNotKeepLogged = {
+                id,
+                token,
+                auth,
+                email,
+                password: senha
+            }
 
-            if(auth)
-                navigate('Landing', {id, auth, token});    
+            if(toggleCheckBox && auth){
+                await AsyncStorage.setItem('user', JSON.stringify(userDatasToKeepLogged));
+                navigate('Landing', { id, token, auth });
+            }
+            else if(!toggleCheckBox && auth){
+                await AsyncStorage.setItem('user', JSON.stringify(userDatasToNotKeepLogged));
+                navigate('Landing', { id, token, auth });
+            }
             else{
-                console.log(auth)
-                alert('Try again!')    
+                alert('Try again!');
             }
         
         }
         catch(error){
+            console.log(error);
             alert('Incorrect email or password');
+            navigate('Login');
         }
         
     }
@@ -120,6 +160,7 @@ function Login(){
                                 onFillColor='#fff'
                                 disabled={false}
                                 value={toggleCheckBox}
+                                onChange={handleCheckBox}
                                 onValueChange={(newValue) => setToggleCheckBox(newValue)}
                             />
                             <Text style={styles.rememberText}> Lembrar-me </Text>

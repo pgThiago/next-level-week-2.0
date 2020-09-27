@@ -8,7 +8,10 @@ const { Navigator, Screen } = createBottomTabNavigator();
 
 import { Ionicons } from '@expo/vector-icons';
 
-function StudyTabs(){
+function StudyTabs({ route }: any){
+
+    const { id, auth, token } = route.params;
+
     return(
         <Navigator
         tabBarOptions={{
@@ -38,9 +41,10 @@ function StudyTabs(){
             activeTintColor: '#32264d',
         }}
         
-        >
+        > 
             <Screen 
             name="TeacherList" 
+            initialParams={{ id, auth, token }}
             component={TeacherList} 
             options={{
                 tabBarLabel: 'Proffys',
@@ -52,6 +56,7 @@ function StudyTabs(){
             <Screen 
             name="Favorites" 
             component={Favorites} 
+            initialParams={{ id, auth, token }}
             options={{
                 tabBarLabel: 'Favoritos',
                 tabBarIcon: ({ color, size, focused }) => {

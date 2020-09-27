@@ -10,6 +10,7 @@ import Input from '../../components/Input';
 import TextArea from '../../components/TextArea';
 import Select from '../../components/Select';
 import warningIcon from '../../assets/images/icons/warning.svg';
+
 import api from '../../services/api';
 
 import convertMinutesToHours from '../../utils/convertMinutesToHours';
@@ -25,7 +26,7 @@ function TeacherProfile() {
     const [ email, setEmail ] = useState('');
     const [ whatsapp, setWhatsapp ] = useState('');
     const [ bio, setBio ] = useState('');
-  
+    
     const [ week_day, setWeekDay ] = useState('');
     const [ from, setFrom ] = useState('');
     const [ to, setTo ] = useState('');
@@ -34,13 +35,11 @@ function TeacherProfile() {
     const [ cost, setCost ] = useState('');
 
     const [ scheduleItems, setScheduleItems ] = useState([
-        { week_day: 0, from: 0, to: 0 }
+        { week_day: 0, from: '', to: ''  }
     ]);
 
     const [ id, setId ] = useState(null);
     const [ token, setToken ] = useState('');
-
-    const user = localStorage.getItem('user');
 
     useEffect(() => {
         try{
@@ -78,17 +77,34 @@ function TeacherProfile() {
     }
 
 
-    function handleCreateClass(e: FormEvent){
+    async function handleUpdateProfile(e: FormEvent){
         e.preventDefault();
-        api.post('classes', {
-            name, 
-            last_name, 
-            whatsapp, 
-            bio, 
-            subject, 
-            cost: Number(cost), 
-            schedule: scheduleItems
-        }).then(() => alert('Enviado'))
+        try{
+            
+            await api.post('update', {
+                name,
+                last_name,
+                whatsapp,
+                bio,
+                cost,
+                avatar,
+                subject,
+                week_day,
+                from,
+                to
+            },{
+                params: { id },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            },
+            );
+            alert('Atualizado!');
+
+        }
+        catch(error){
+            console.log('Deu pau na atualização do perfil: ', error);
+        }
     }
 
     // My functions ( from the challenges - 2.0 version )
@@ -97,7 +113,14 @@ function TeacherProfile() {
     
         async function getProffyDatas(){
             try{
-
+                const user = localStorage.getItem('user');
+                const userString = `${user}`
+                const userInformation = JSON.parse(userString);
+                const { id, token, auth } = userInformation;
+                if(!token){
+                    alert('Você precisa se cadastrar primeiro');
+                    history.push('/give-classes');
+                }
                 const userInfo = await api.get('/profile', {
                     params: {
                         id
@@ -106,25 +129,13 @@ function TeacherProfile() {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                console.log(userInfo.data)
+
                 if(userInfo.data.length === 0){
-                    alert('Você precisa se cadastrar primeiro');
-                    history.push('/give-classes');
+                    alert('Você precisa ser um professor para ter um perfil.')
+                    history.push('/landing');
                 }
+
                 const { avatar, name, last_name, email, whatsapp, bio, week_day, subject, cost, from, to } = userInfo.data[0];
-                console.log({
-                    avatar,
-                    name,
-                    last_name,
-                    email,
-                    whatsapp,
-                    bio,
-                    week_day,
-                    subject,
-                    cost,
-                    from,
-                    to
-                });
                
                 setAvatar(avatar);
                 setName(name);
@@ -149,7 +160,6 @@ function TeacherProfile() {
                     
                     if(fromTimeSplit[0].length === 2 && fromTimeSplit[1].length === 1){
                         fromTime = `${fromHours}:${fromMinutes}0`;
-                        console.log(fromTime)
                     }
 
                     if(fromTimeSplit[0].length === 1 && fromTimeSplit[1].length === 2){
@@ -178,19 +188,27 @@ function TeacherProfile() {
                         toTime = `0${toHours}:${toMinutes}`;
 
                 }
-                
-
                 setWeekDay(week_day);
                 setFrom(fromTime);
                 setTo(toTime);
-                
+                                
+                scheduleItems.map((scheduleItem, index) => {
+                    scheduleItem.week_day = week_day;
+                    scheduleItem.from = fromTime;
+                    scheduleItem.to = toTime;
+                    setScheduleItemValue(index, 'week_day', week_day);
+                    setScheduleItemValue(index, 'from', fromTime);
+                    setScheduleItemValue(index, 'to', toTime);
+                    return true;
+                });
+                                
             }
             catch(error){
-                console.log(error);
+                history.push('/landing');
             }
         }
         getProffyDatas();
-    }, [id]);
+    }, [history]);
 
     return (
         <div id="page-teacher-profile" className="container" >
@@ -204,7 +222,7 @@ function TeacherProfile() {
                 <Link to="/" className="log-out">Sair</Link>
             </header>
             <main>
-                <form onSubmit={handleCreateClass}>
+                <form onSubmit={handleUpdateProfile}>
                     <fieldset>
                         <legend>Seus dados</legend>
 
@@ -285,7 +303,7 @@ function TeacherProfile() {
                             <Select
                                 name="week_day"
                                 label="Dia da semana"
-                                value={week_day}
+                                value={scheduleItem.week_day}
                                 onChange={e => setScheduleItemValue(index, 'week_day', e.target.value)}
                                 options={[
                                     { value: '0', label: 'Domingo' },
@@ -301,7 +319,7 @@ function TeacherProfile() {
                              name="from"
                              label="Das"
                              type="time"
-                             value={from}
+                             value={scheduleItem.from}
                              onChange={e => setScheduleItemValue(index, 'from', e.target.value)}
 
                              />
@@ -311,7 +329,7 @@ function TeacherProfile() {
                              name="to"
                              label="Até"
                              type="time"
-                             value={to} 
+                             value={scheduleItem.to} 
                              onChange={e => setScheduleItemValue(index, 'to', e.target.value)}
 
                              />

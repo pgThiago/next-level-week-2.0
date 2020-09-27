@@ -28,8 +28,9 @@ routes.post('/forgot_password', usersController.forgotPassword);
 routes.post('/reset_password', usersController.resetPassword);
 
 routes.get('/profile', teacherController.index);
-routes.post('/update/:id', teacherController.update);
-routes.post('/:proffyid/favorites', teacherController.setFavorites);
-routes.delete('/:proffyid/delfavorites', teacherController.delFavorites);
+routes.post('/update/', teacherController.update);
+routes.post('/prof/favorites', teacherController.setFavorites);
+routes.post('/prof/delfavorites', teacherController.delFavorites);
+routes.post('/prof/loadfavorites', teacherController.loadFavorites);
 
 export default routes;

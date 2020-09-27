@@ -37,7 +37,6 @@ function GiveClasses({ route }: any){
     const [ email, setEmail ] = useState('');
     const [ whatsapp, setWhatsapp ] = useState('');
 
-
     useEffect(() => {
         if(!id || !token || !auth){
             navigate('Landing');
@@ -61,7 +60,6 @@ function GiveClasses({ route }: any){
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                console.log(userInfo.data)
                 if(userInfo.data.length === 0){
                     alert('Você precisa se cadastrar em "Dar Aulas" primeiro.');
                     navigate('GiveClasses', { id, auth, token });

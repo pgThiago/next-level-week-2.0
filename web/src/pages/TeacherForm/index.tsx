@@ -28,10 +28,7 @@ function TeacherForm() {
 
     const [ id, setId ] = useState(null);
     const [ token, setToken ] = useState('');
-    const [ auth, setAuth ] = useState(false);
 
-    const user = localStorage.getItem('user');
-    console.log(user);
 
     useEffect(() => {
         try{
@@ -42,7 +39,6 @@ function TeacherForm() {
     
             setId(id);
             setToken(token);
-            setAuth(auth);
     
             if(!auth || !token)
                 history.push('/');
@@ -50,13 +46,15 @@ function TeacherForm() {
         catch(error){
             history.push('/');
         }
-    }, []);
+    }, [history]);
 
     
     function addNewScheduleItem(){
         setScheduleItems([
             ...scheduleItems,
         ])
+
+        console.log(scheduleItems);
     }
 
     function setScheduleItemValue(position: number, field: string, value: string){
@@ -71,41 +69,42 @@ function TeacherForm() {
     }
 
     async function handleCreateClass(e: FormEvent){
-        
-        const userInfo = await api.get('/profile', {
-            params: {
-                id
-            },                  
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        
-        if(userInfo.data.length === 0){
-            e.preventDefault();
-            await api.post('classes', {
-                name, 
-                avatar, 
-                whatsapp, 
-                bio, 
-                subject, 
-                cost: Number(cost), 
-                schedule: scheduleItems
-            },{
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
+        e.preventDefault();
+        try{
+            const userInfo = await api.get('/profile', {
                 params: {
                     id
+                },                  
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-            }).then(() => {
+            });
+            
+            if(userInfo.data.length === 0){
+                await api.post('classes', {
+                    name, 
+                    avatar, 
+                    whatsapp, 
+                    bio, 
+                    subject, 
+                    cost: Number(cost), 
+                    schedule: scheduleItems
+                },{
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    params: {
+                        id
+                    }
+                })
                 history.push('/profile')
-            })
-            .catch((error) => console.log('Erro no TeacherForm: ', error));
-        }
-        else{
-            alert('Não é possível cadastrar-se mais de uma vez.');
-            history.push('/profile');
+            }
+            else{
+                alert('Não é possível cadastrar-se mais de uma vez.');
+                history.push('/profile');
+        }}
+        catch(error){
+            console.log(error);
         }
     }
 

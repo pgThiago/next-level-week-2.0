@@ -23,10 +23,12 @@ export interface Teacher {
 interface TeacherItemProps {
     teacher: Teacher;
     favorited: boolean;
+    route: {id: Number, auth: Boolean, token: String};
 }
 
-const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited, route }) => {
 
+    
     const [ isFavorited, setIsFavorited ] = useState(favorited);
 
     function handleLinkToWhatsapp(){
@@ -39,7 +41,6 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
     async function handleToggleFavorite(){
         
         const favorites = await AsyncStorage.getItem('favorites');
-        AsyncStorage.clear()
         let favoritesArray = [];
 
         if(favorites){
@@ -48,20 +49,53 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited }) => {
 
         if(isFavorited){
             // Remover dos favoritos
+            try{
+
+            
             const favoriteIndex = favoritesArray.findIndex((teacherItem: Teacher) => {
                 return teacherItem.id === teacher.id;
             });
 
             favoritesArray.splice(favoriteIndex, 1);
 
+            const { id, token } = route;
+                const resp = await api.post('/prof/delfavorites', null, { 
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'user': id,
+                        'teacherID': teacher.id
+                    },
+                });
+
+            console.log(resp.data);
+
             setIsFavorited(false);
+            }
+            catch(error){
+                console.log('Erro: ', error.response);
+            }
             
         }
         else{
             // Adicionar aos favoritos
-            favoritesArray.push(teacher);
 
-            setIsFavorited(true);
+            try{
+                
+                favoritesArray.push(teacher);
+                const { id, token } = route;
+                const resp = await api.post('/prof/favorites', null, { 
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'user': id,
+                        'teacherID': teacher.id
+                    },
+                });
+
+                setIsFavorited(true);
+            }
+            catch(error){
+                console.log('Ta foda salvar os favoritos: ', error.response);
+            }
         }
         
         await AsyncStorage.setItem('favorites', JSON.stringify(favoritesArray));

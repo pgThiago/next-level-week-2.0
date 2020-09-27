@@ -11,6 +11,9 @@ import heartIcon from '../../assets/images/icons/heart.png';
 import { useNavigation } from '@react-navigation/native';
 
 import { RectButton } from 'react-native-gesture-handler';
+
+import AsyncStorage from '@react-native-community/async-storage';
+
 import api from '../../services/api';
 
 function Landing({ route }: any){
@@ -22,14 +25,14 @@ function Landing({ route }: any){
     const { navigate } = useNavigation();
 
     useEffect(() => {
-        api.get('connections').then(response => {
+        api.get('connections', { headers: { 'Authorization': `Bearer ${token}` } }).then(response => {
             const { total } = response.data;
             setTotalConnections(total);
-        }).catch(err => { console.log(err) })
+        }).catch(err => { console.log('err: ', err) })
     }, []);
 
     function handleNavigateToStudyPage(){
-        navigate('Study');
+        navigate('Study', { id, auth, token });
     }
 
     function goToProfile(){
@@ -37,11 +40,12 @@ function Landing({ route }: any){
     }
 
     function handleNavigateToClassesPage(){
-
         navigate('GiveClasses', { id, auth, token });
     }
 
     function logOut(){
+        api.get('/logout');
+        AsyncStorage.clear();
         navigate('Login');
     }
     

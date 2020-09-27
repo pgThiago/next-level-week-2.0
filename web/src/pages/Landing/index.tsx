@@ -18,7 +18,12 @@ function Landing(){
     const history = useHistory();
 
     const [ totalConnections, setTotalConnections ] = useState(0);
-    const [ token, setToken ] = useState('');
+
+    function logOut(){
+        api.get('/logout');
+        localStorage.clear();
+        history.push('/');
+    }
 
     useEffect(() => {
         try{
@@ -26,8 +31,8 @@ function Landing(){
             const userString = `${user}`
             const userInformation = JSON.parse(userString);
             const { token, auth } = userInformation;
-            setToken(token);
-            if(!auth || !token)
+            
+            if(!auth)
                 history.push('/');
             
             api.get('connections', { headers: { 'Authorization': `Bearer ${token}` } }).then(response => {
@@ -36,15 +41,16 @@ function Landing(){
             })
         }
         catch(error){
-            history.push('/');        }
+            console.log(error);
+        }
         
-    }, [token]);
+    }, [history]);
 
     return (
         <div id="page-landing">
             <header className="landing-header">
                 <Link to="/profile" className="profile">Meu perfil</Link>
-                <Link to="/" className="log-out">Sair</Link>
+                <button onClick={logOut} className="log-out">Sair</button>
             </header>
             <div id="page-landing-content" className="container">
                 <div className="logo-container">
@@ -77,4 +83,4 @@ function Landing(){
     )
 }
 
-export  default Landing;
+export default Landing;

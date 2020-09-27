@@ -12,18 +12,37 @@ function Login(){
     const [ email, setEmail ] = useState('');
     const [ senha, setSenha ] = useState('');
 
+    const [ check, setCheck ] = useState(false);
+
+    function handleCheckBox(){
+        setCheck(!check)
+    }
 
     useEffect(() => {
-        api.get('/logout');
-        localStorage.clear();
+        try{
+            const user = localStorage.getItem('user');
+            
+            const userAsObject = JSON.parse(`${user}`);
+            const { auth } = userAsObject;
+            console.log(userAsObject.id);
+            if(auth){
+                history.push('/landing')
+            }
+            else{
+                history.push('/');
+            }
+        }
+        catch(error){
+            history.push('/');
+        }
     }, []);
+
 
     async function handleSubmit(event: any){
 
         event.preventDefault();
 
         try{
-
            
             const loginInfo = await api.post('/login', {
                 email: email,
@@ -36,16 +55,28 @@ function Login(){
             const userDatasToKeepLogged = {
                 id,
                 token,
-                auth
+                auth,
+                email,
+                password: senha
             }
 
-            localStorage.setItem('user', JSON.stringify(userDatasToKeepLogged));
+            const userDatasToNotKeepLogged = {
+                id,
+                token,
+                auth,
+            }
 
-            if(auth)
-                history.push('/landing');    
-            else
-                alert('Try again!')    
-        
+            if(check && auth){
+                localStorage.setItem('user', JSON.stringify(userDatasToKeepLogged));
+                history.push('/landing');
+            }
+            else if(!check && auth){
+                localStorage.setItem('user', JSON.stringify(userDatasToNotKeepLogged));
+                history.push('/landing');
+            }
+            else{
+                alert('Try again!');
+            }        
         }
         catch(error){
             alert('Incorrect email or password');
@@ -82,7 +113,7 @@ function Login(){
                 />
 
                     <div className="forgot-password-box">
-                        <input type="checkbox"/>
+                        <input type="checkbox" defaultChecked={check} onChange={handleCheckBox} />
                         <p>Lembrar-me.</p>
                         <button className="forgot-button" onClick={handleForgotPassword}>Esqueci minha senha.</button>
                     </div> 

@@ -4,13 +4,10 @@ export async function up(knex: Knex) {
     return knex.schema.createTable('favorites', table => {
         table.increments('id').primary();
 
-        table.integer('user_id')
-        .notNullable()
-        .references('id')
-        .inTable('users')
-        .onUpdate('CASCADE')
-        .onDelete('CASCADE');
+        table.integer('user_id').notNullable()
 
+        table.integer('prof_id').notNullable()
+        
     });
 }
 

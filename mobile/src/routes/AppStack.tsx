@@ -18,18 +18,18 @@ import StudyTabs from './StudyTabs';
 function AppStack(){
     return (
         <NavigationContainer>
-            <Navigator screenOptions={{ headerShown: false } } initialRouteName="Login" >
+            <Navigator screenOptions={{ headerShown: false } } >
 
+                <Screen name='Login' component={Login}/>
+                <Screen name='Landing' component={Landing}/>
                 <Screen name='ForgotPassword' component={ForgotPassword}/>
                 <Screen name='NewPassword' component={NewPassword}/>
-                <Screen name='Login' component={Login}/>
                 <Screen name='TeacherProfile' component={TeacherProfile}/>
                 <Screen name='GiveClasses' component={GiveClasses}/>
-                <Screen name='Landing' component={Landing}/>
+                <Screen name='Study' component={StudyTabs}/>
                 <Screen name='Cadastro' component={Cadastro}/>
                 <Screen name='CadastroFinal' component={CadastroFinal}/>
                 <Screen name='CadastroConcluido' component={CadastroConcluido}/>
-                <Screen name='Study' component={StudyTabs}/>
 
             </Navigator>
         </NavigationContainer>  
