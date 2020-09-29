@@ -33,7 +33,7 @@ export default class ClassesController {
 
     async update(request: Request, response: Response){
         const { id } = request.query;
-        
+
         // Na tabela user_account mudar o: last_name 
         // Na tabela users mudar o: name, avatar, whatsapp, bio
         // Na tabela classes mudar o: subject, cost, bio
@@ -92,14 +92,39 @@ export default class ClassesController {
         }
     }
 
-    async loadFavorites(request: Request, response: Response){
+    async loadFavoritesIds(request: Request, response: Response){
         const { user } = request.headers;
 
-        const favTeachers = await db('users').where(
-            'users.id', user
-        ).select('*');
+        const userId = user as string;
 
-        return response.send(favTeachers);
+        const favTeachers = await db('favorites')
+        .where({
+            user_id: userId
+        }).select('prof_id');
+
+        let profs: any[] = [];
+
+        favTeachers.map(fav => {
+            profs.push(fav.prof_id)
+        })
+
+        return response.send(profs);
+    }
+
+    async loadFavoritesContent(request: Request, response: Response){
+        const { proffyid } = request.headers;
+
+        const favTeachers= await db('user_account')
+        .join('users', `user_account.id`, '=', `users.id`)
+        .join('classes', `users.id`, '=', `classes.user_id`)
+        .join('class_schedule', 'class_id', '=', 'classes.id')
+        .select('users.id', 'name', 'last_name', 'email', 'whatsapp', 'bio', 'cost', 'avatar', 'subject', 'week_day', 'from', 'to')
+        .where(`users.id`, '=', `${proffyid}`);
+
+        let responseArray = [];
+        responseArray.push(favTeachers[0]);    
+
+        return response.json(responseArray);
     }
 
     async setFavorites(request: Request, response: Response){
@@ -136,8 +161,13 @@ export default class ClassesController {
             else
                 return response.send('Already favorited!');
 
+            const teacher = await db('users')
+            .where({
+                id: teacherid
+            }).select('*');
 
-            return response.send('Favorited succesfully!');
+
+            return response.json(teacher);
         }
         catch(error){
             console.log(error);
@@ -167,8 +197,6 @@ export default class ClassesController {
                 prof_id: teacherid,
                 user_id: user,
             }).select('*');
-
-            console.log(checkIfIsFavorited.length);
 
             if(checkIfIsFavorited.length !== 0){
                 await db('favorites').where(

@@ -31,6 +31,7 @@ routes.get('/profile', teacherController.index);
 routes.post('/update/', teacherController.update);
 routes.post('/prof/favorites', teacherController.setFavorites);
 routes.post('/prof/delfavorites', teacherController.delFavorites);
-routes.post('/prof/loadfavorites', teacherController.loadFavorites);
+routes.post('/prof/loadfavorites', teacherController.loadFavoritesIds);
+routes.post('/prof/loadfavoritesContent', teacherController.loadFavoritesContent);
 
 export default routes;

@@ -19,7 +19,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
     const { navigate } = useNavigation();
 
     function handleGoBack(){
-        navigate('Login');
+        navigate('Landing');
     }
 
     return(

@@ -3,7 +3,7 @@ import { View, ScrollView } from 'react-native';
 
 import styles from './styles';
 import PageHeader from '../../components/PageHeader';
-import TeacherItem, { Teacher } from '../../components/TeacherItem';
+import TeacherItem, { Teacher, favorited } from '../../components/TeacherItem';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -13,40 +13,48 @@ import { useIsFocused } from "@react-navigation/native";
 
 function Favorites({ route }: any){
 
-    const [ favoritesTeachers, setFavoritesTeachers ] = useState([]);
+    const [ favoritesTeachers, setFavorites ] = useState([]);
     const isFocused = useIsFocused();
-
-    async function loadFavorites(){
-        AsyncStorage.getItem('favorites').then(response => {
-            if(response){
-                const favoritedTeachers = JSON.parse(response);
-                setFavoritesTeachers(favoritedTeachers);
-            }
-        });
+    const { id, token, auth } = route.params;
     
-        const { id, token } = route;
+    
+    async function loadFavorites(){
+    
         try{
-
-            await api.post('/prof/loadFavorites', {
+            const favTeachers = await api.post('/prof/loadFavorites', null, { // Retorna i id dos prods favoritos
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'user': id,
                 }
             });
+
+            let favArray = favTeachers.data;
+            
+            let favoritesArrayDatas = [];
+
+            for(let i = 0; i < favArray.length; i++){
+                const datas = await api.post('/prof/loadFavoritesContent', null, { // Retorna i id dos prods favoritos
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'proffyid': favArray[i],
+                    }
+                })
+                favoritesArrayDatas.push(datas.data[0]);
+            }
+            
+            setFavorites(favoritesArrayDatas);
         }
         catch(error){
-            console.log(error.response);
+            console.log(error);
         }
-
 
     }
 
-    useFocusEffect(
-        React.useCallback(() => {
-          loadFavorites();
-        }, [isFocused])
-    )
-    
+    useEffect(() => {
+        loadFavorites();
+    }, [favoritesTeachers]);
+      
+
 
     return(
         <View style={styles.container}>
@@ -63,6 +71,7 @@ function Favorites({ route }: any){
                             key={teacher.id}
                             teacher={teacher}
                             favorited 
+                            route={{ id, auth, token }}
                         />
                     )
                 )}

@@ -254,6 +254,13 @@ function TeacherProfile() {
                         onChange={(e => setWhatsapp(e.target.value))}
                         />
 
+                        <Input 
+                        name="avatar" 
+                        label="avatar" 
+                        value={avatar}
+                        onChange={(e => setAvatar(e.target.value))}
+                        />
+
                         <TextArea 
                         name="biografia" 
                         label="Biografia" 

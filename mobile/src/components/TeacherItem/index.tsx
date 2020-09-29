@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, Text, Linking } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
@@ -7,8 +7,8 @@ import heartOutLineIcon from '../../assets/images/icons/heart-outline.png';
 import unfavoriteIcon from '../../assets/images/icons/unfavorite.png';
 import whatsapp from '../../assets/images/icons/whatsapp.png';
 
-import AsyncStorage from '@react-native-community/async-storage';
 import api from '../../services/api';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 export interface Teacher {
     id: number;
@@ -30,6 +30,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited, route }) 
 
     
     const [ isFavorited, setIsFavorited ] = useState(favorited);
+    const [ , reload ] = useState(favorited);
 
     function handleLinkToWhatsapp(){
         api.post('connections', {
@@ -39,68 +40,53 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited, route }) 
     }
 
     async function handleToggleFavorite(){
-        
-        const favorites = await AsyncStorage.getItem('favorites');
-        let favoritesArray = [];
-
-        if(favorites){
-            favoritesArray = JSON.parse(favorites);
-        }
-
+    
         if(isFavorited){
             // Remover dos favoritos
             try{
 
-            
-            const favoriteIndex = favoritesArray.findIndex((teacherItem: Teacher) => {
-                return teacherItem.id === teacher.id;
-            });
+                const { id, token } = route;
+                    await api.post('/prof/delfavorites', null, { 
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'user': id,
+                            'teacherID': teacher.id
+                        },
+                    });
 
-            favoritesArray.splice(favoriteIndex, 1);
 
-            const { id, token } = route;
-                const resp = await api.post('/prof/delfavorites', null, { 
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'user': id,
-                        'teacherID': teacher.id
-                    },
-                });
-
-            console.log(resp.data);
-
-            setIsFavorited(false);
+                setIsFavorited(false);
             }
+            
             catch(error){
-                console.log('Erro: ', error.response);
+                console.log('Erro ao remover dos: ', error);
             }
             
         }
         else{
             // Adicionar aos favoritos
-
             try{
                 
-                favoritesArray.push(teacher);
                 const { id, token } = route;
-                const resp = await api.post('/prof/favorites', null, { 
+                
+                await api.post('/prof/favorites', null, { 
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'user': id,
                         'teacherID': teacher.id
                     },
                 });
-
                 setIsFavorited(true);
             }
             catch(error){
-                console.log('Ta foda salvar os favoritos: ', error.response);
+                console.log('Erro ao salvar os favoritos: ', error.response);
             }
         }
-        
-        await AsyncStorage.setItem('favorites', JSON.stringify(favoritesArray));
-
     }
+
+    useEffect(() => {
+        reload;
+    }, [isFavorited]);
 
     return(
         <View style={styles.container}>
@@ -129,6 +115,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited, route }) 
                   </Text>
                 <View style={styles.buttonsContainer}>
                     <RectButton onPress={handleToggleFavorite}
+                    
                     style={[
                         styles.favoriteButton, 
                         isFavorited ? styles.favorited : {}

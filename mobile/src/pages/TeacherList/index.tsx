@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { ScrollView, TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
+import { View, Text, FlatList } from 'react-native';
+import { TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
-
-import AsyncStorage from '@react-native-community/async-storage';
 
 import styles from './styles';
 import PageHeader from '../../components/PageHeader';
@@ -16,39 +14,51 @@ import api from '../../services/api';
 import { useIsFocused } from "@react-navigation/native";
 
 function TeacherList({ route }: any){
+    
+    const isFocused = useIsFocused();
 
     const { id, auth, token } = route.params;
-
     
     const [isFiltersVisible, setIsFiltersVisible] = useState(false);
 
     const [ teachers, setTeachers ] = useState([]);
-    const [ favoritesTeachers, setFavoritesTeachers ] = useState<number[]>([]);
+    const [ favoritesTeachers, setFavorites ] = useState<number[]>([]);
 
     const [ subject, setSubject ] = useState('');
     const [ week_day, setWeek_day ] = useState('');
     const [ time, setTime ] = useState('');
-    const isFocused = useIsFocused();
 
-    function loadFavorites(){
+    async function loadFavoritos(){
+    
+        try{
+    
+            const favTeachers = await api.post('/prof/loadFavorites', null, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'user': id,
+                }
+            });
+
+            const favArray = favTeachers.data;
+
+            const favoritedIds = favArray.map((id: any) => {
+                return id
+            })
+
+            setFavorites(favoritedIds);
+
+        }
+
+        catch(error){
+            console.log('Erro ao carregar os favoritos na página Teacher List: ', error);
+        }
         
-        AsyncStorage.getItem('favorites').then(response => {
-            if(response){
-                const favoritedTeachers = JSON.parse(response);
-                const favoritesTeachersIds = favoritedTeachers.map((teacher: Teacher) => {
-                    return teacher.id;
-                })
-                setFavoritesTeachers(favoritesTeachersIds);
-            }
-        });
     }
 
-    useFocusEffect(
-        React.useCallback(() => {
-          loadFavorites();
-        }, [isFocused])
-    )   
-
+    useEffect(() => {
+        loadFavoritos();
+    }, [favoritesTeachers]);
+     
     function handleToggleFiltersVisible(){
         setIsFiltersVisible(!isFiltersVisible);
     }
@@ -64,7 +74,7 @@ function TeacherList({ route }: any){
     async function handleFiltersSubmit(){
 
         try{
-            loadFavorites();
+            loadFavoritos();
 
             const response = await api.get('classes', {
                 params: {
@@ -79,7 +89,6 @@ function TeacherList({ route }: any){
 
             
             const proffys = doNotReturnYourself(response.data);
-            console.log(proffys);
             
             setIsFiltersVisible(false);
             setTeachers(proffys);
@@ -151,25 +160,46 @@ function TeacherList({ route }: any){
                 )}
 
             </PageHeader>
-            
-            <ScrollView 
-            style={styles.teacherList}
-            contentContainerStyle={{
-                paddingHorizontal: 16,
-                paddingBottom: 16
-            }}
-            >
-                {teachers.map((teacher : Teacher )=> {
-                    return (<TeacherItem 
-                        key={teacher.id}
-                        teacher={teacher}
+
+            <FlatList
+                style={styles.teacherList}
+                contentContainerStyle={{
+                    paddingHorizontal: 16,
+                    paddingBottom: 16
+                }}
+                data={teachers}
+                keyExtractor={( item: Teacher) => `${item.id}`}
+                renderItem={ ({ item }) => (
+                    <TeacherItem 
+                        key={`${item.id}`}
+                        teacher={item}
                         route={{ id, auth, token }}
-                        favorited={favoritesTeachers.includes(teacher.id)}
-                    />)
-                })}
-            </ScrollView>
+                        favorited={favoritesTeachers.includes(item.id)}
+                    />
+                ) } 
+            />                    
         </View>
     )
 }
 
-export default TeacherList;
+export default TeacherList; 
+
+
+//1.0 version
+{/* { <ScrollView 
+
+style={styles.teacherList}
+contentContainerStyle={{
+    paddingHorizontal: 16,
+    paddingBottom: 16
+}}
+>
+    {teachers.map((teacher : Teacher )=> {
+        return (<TeacherItem 
+            key={teacher.id}
+            teacher={teacher}
+            route={{ id, auth, token }}
+            favorited={favoritesTeachers.includes(teacher.id)}
+        />)
+    })}
+</ScrollView> } */}
