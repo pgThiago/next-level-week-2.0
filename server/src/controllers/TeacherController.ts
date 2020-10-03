@@ -75,7 +75,6 @@ export default class ClassesController {
                 cost,
             })
 
-            
 
             await db('class_schedule')
             .where(`class_id`, '=', id)
@@ -202,11 +201,6 @@ export default class ClassesController {
                 await db('favorites').where(
                     'prof_id', teacherid
                 ).del();
-                
-                await db('favorites').where(
-                    'user_id', user
-                ).del();                
-
             }
             
 

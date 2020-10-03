@@ -29,6 +29,7 @@ function Landing({ route }: any){
             const { total } = response.data;
             setTotalConnections(total);
         }).catch(err => { console.log('err: ', err) })
+        AsyncStorage.removeItem('profs');
     }, []);
 
     function handleNavigateToStudyPage(){

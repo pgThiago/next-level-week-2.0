@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Image, Text, Linking } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 
 import styles from './styles';
 import heartOutLineIcon from '../../assets/images/icons/heart-outline.png';
@@ -8,7 +8,13 @@ import unfavoriteIcon from '../../assets/images/icons/unfavorite.png';
 import whatsapp from '../../assets/images/icons/whatsapp.png';
 
 import api from '../../services/api';
+
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import useForceUpdate from 'use-force-update';
+
+
+import { ReloadContext } from '../../context';
+
 
 export interface Teacher {
     id: number;
@@ -20,17 +26,23 @@ export interface Teacher {
     whatsapp: string;
 }
 
-interface TeacherItemProps {
+export interface TeacherItemProps {
     teacher: Teacher;
     favorited: boolean;
     route: {id: Number, auth: Boolean, token: String};
 }
 
-const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited, route }) => {
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, route, favorited }) => {
 
-    
-    const [ isFavorited, setIsFavorited ] = useState(favorited);
-    const [ , reload ] = useState(favorited);
+    const [ isItemFavorited, setIsItemFavorited ] = useState(favorited);
+
+    const shouldReload = useContext(ReloadContext);
+    const { handleToggle, fav } = shouldReload;
+
+    useEffect(() => {
+        handleToggle(favorited);
+    }, [favorited]);
+
 
     function handleLinkToWhatsapp(){
         api.post('connections', {
@@ -40,8 +52,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited, route }) 
     }
 
     async function handleToggleFavorite(){
-    
-        if(isFavorited){
+        if(favorited){
             // Remover dos favoritos
             try{
 
@@ -53,9 +64,7 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited, route }) 
                             'teacherID': teacher.id
                         },
                     });
-
-
-                setIsFavorited(false);
+                    setIsItemFavorited(fav);
             }
             
             catch(error){
@@ -76,17 +85,13 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited, route }) 
                         'teacherID': teacher.id
                     },
                 });
-                setIsFavorited(true);
+                setIsItemFavorited(!favorited);
             }
             catch(error){
                 console.log('Erro ao salvar os favoritos: ', error.response);
             }
         }
-    }
-
-    useEffect(() => {
-        reload;
-    }, [isFavorited]);
+    } 
 
     return(
         <View style={styles.container}>
@@ -114,16 +119,16 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorited, route }) 
                      <Text style={styles.priceValue}>R$: {teacher.cost}</Text>
                   </Text>
                 <View style={styles.buttonsContainer}>
-                    <RectButton onPress={handleToggleFavorite}
+                    <TouchableOpacity onPress={handleToggleFavorite}
                     
                     style={[
                         styles.favoriteButton, 
-                        isFavorited ? styles.favorited : {}
+                            favorited ? styles.favorited : {}
                         ]}>
                       
-                        { isFavorited ? <Image source={unfavoriteIcon} /> :  <Image source={heartOutLineIcon} /> }
+                        {  favorited ? <Image source={unfavoriteIcon} /> :  <Image source={heartOutLineIcon} /> }
                    
-                    </RectButton>
+                    </TouchableOpacity>
 
                     <RectButton onPress={handleLinkToWhatsapp} style={styles.contactButton}>
                         <Image source={whatsapp} />

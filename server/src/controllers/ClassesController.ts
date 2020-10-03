@@ -2,6 +2,10 @@ import { Request, Response } from 'express';
 
 import db from '../database/connection';
 import conventHourToMinutes from '../utils/convertHourToMinutes';
+import doNotReturnYourself from '../utils/doNotReturnYourself';
+
+import { attachPaginate } from 'knex-paginate';
+attachPaginate();
 
 interface ScheduleItem {
     week_day: number;
@@ -15,10 +19,22 @@ export default class ClassesController {
 
         const filters = request.query;
 
+        /* const { porPag, currentPag } = request.query;
+
+        const quantidadePorPagina = Number(porPag);
+        const paginaAtual = Number(currentPag); */
+
         try{
+
+            const loggedUserId = Number(filters.id);
+
+            const porPag = Number(filters.porPag);
+            const currentPag = Number(filters.currentPag);
+
             const subject = filters.subject as string;
             const week_day = filters.week_day as string;
             const time = filters.time as string;
+            
     
             if(!filters.week_day || !filters.subject || !filters.time){
                 return response.status(400).json({
@@ -39,9 +55,12 @@ export default class ClassesController {
             })
             .where('classes.subject', '=', subject)
             .join('users', 'classes.user_id', '=', 'users.id')
-            .select(['classes.*', 'users.*']);
+            .where('users.id', '!=', `${loggedUserId}`)
+            .select(['classes.*', 'users.*']).paginate( { perPage: porPag, currentPage: currentPag } );
+
+            if(classes.data.length > 0)
+                return response.json(classes.data);
     
-            return response.json(classes);
         }
         catch(error){
             return response.json(error);    

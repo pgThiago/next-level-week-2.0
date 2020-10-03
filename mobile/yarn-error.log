@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @react-native-community/checkbox
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add use-force-update @react-native-community/checkbox
 
 PATH: 
-  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Python27\;C:\Python27\Scripts;C:\xampp\php;C:\Program Files\Microsoft VS Code\bin;C:\flutter\bin;C:\Windows\System32;C:\Program Files (x86)\Yarn\bin\;C:\ProgramData\ComposerSetup\bin;C:\Program Files\MongoDB\Server\4.4\bin\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_211\bin;C:\Users\Positivo\AppData\Local\Android\Sdk\platform-tools;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Positivo\AppData\Local\Microsoft\WindowsApps\wt.exe;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\Positivo\AppData\Local\Programs\Python\Python37-32\Scripts\;C:\Users\Positivo\AppData\Local\Programs\Python\Python37-32\;C:\Users\Positivo\AppData\Local\Microsoft\WindowsApps;C:\Users\Positivo\.deno\bin;C:\Users\Positivo\AppData\Local\Yarn\bin;C:\Users\Positivo\AppData\Roaming\Composer\vendor\bin;C:\Users\Positivo\AppData\Local\Microsoft\WindowsApps;C:\Users\Positivo\AppData\Roaming\npm
+  C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.3.2651.0_x64__8wekyb3d8bbwe;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Python27\;C:\Python27\Scripts;C:\xampp\php;C:\Program Files\Microsoft VS Code\bin;C:\flutter\bin;C:\Windows\System32;C:\Program Files (x86)\Yarn\bin\;C:\ProgramData\ComposerSetup\bin;C:\Program Files\MongoDB\Server\4.4\bin\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_211\bin;C:\Users\Positivo\AppData\Local\Android\Sdk\platform-tools;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\Positivo\AppData\Local\Microsoft\WindowsApps\wt.exe;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\Positivo\AppData\Local\Programs\Python\Python37-32\Scripts\;C:\Users\Positivo\AppData\Local\Programs\Python\Python37-32\;C:\Users\Positivo\AppData\Local\Microsoft\WindowsApps;C:\Users\Positivo\.deno\bin;C:\Users\Positivo\AppData\Local\Yarn\bin;C:\Users\Positivo\AppData\Roaming\Composer\vendor\bin;C:\Users\Positivo\AppData\Local\Microsoft\WindowsApps;C:\Users\Positivo\AppData\Roaming\npm
 
 Yarn version: 
   1.22.4
@@ -46,7 +46,8 @@ npm manifest:
       "react-native-reanimated": "~1.9.0",
       "react-native-safe-area-context": "~3.0.7",
       "react-native-screens": "~2.9.0",
-      "react-native-web": "~0.11.7"
+      "react-native-web": "~0.11.7",
+      "use-force-update": "^1.0.7"
     },
     "devDependencies": {
       "@babel/core": "^7.8.6",
@@ -5514,6 +5515,11 @@ Lockfile:
     dependencies:
       querystringify "^2.1.1"
       requires-port "^1.0.0"
+  
+  use-force-update@^1.0.7:
+    version "1.0.7"
+    resolved "https://registry.yarnpkg.com/use-force-update/-/use-force-update-1.0.7.tgz#f5e672633f5a398b25c33b2287150918bcb3526b"
+    integrity sha512-k5dppYhO+I5X/cd7ildbrzeMZJkWwdAh5adaIk0qKN2euh7J0h2GBGBcB4QZ385eyHHnp7LIygvebdRx3XKdwA==
   
   use-subscription@^1.0.0, use-subscription@^1.4.0:
     version "1.4.1"

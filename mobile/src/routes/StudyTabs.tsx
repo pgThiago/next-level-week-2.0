@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TeacherList from '../pages/TeacherList';
@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 function StudyTabs({ route }: any){
 
     const { id, auth, token } = route.params;
+
 
     return(
         <Navigator

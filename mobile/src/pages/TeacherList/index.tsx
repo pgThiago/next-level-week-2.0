@@ -1,33 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text , FlatList } from 'react-native';
 import { TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
-import { useFocusEffect } from '@react-navigation/native';
 
 import styles from './styles';
 import PageHeader from '../../components/PageHeader';
 import TeacherItem, { Teacher } from '../../components/TeacherItem';
 
-
 import { Feather } from '@expo/vector-icons';
 import api from '../../services/api';
 
-import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+
+import useForceUpdate from 'use-force-update';
+import { ReloadContext } from '../../context';
+
 
 function TeacherList({ route }: any){
-    
-    const isFocused = useIsFocused();
 
-    const { id, auth, token } = route.params;
-    
+    const { id, auth, token } = route.params;    
     const [isFiltersVisible, setIsFiltersVisible] = useState(false);
-
-    const [ teachers, setTeachers ] = useState([]);
+    const [ teachers, setTeachers ] = useState<Teacher[]>([]);
     const [ favoritesTeachers, setFavorites ] = useState<number[]>([]);
-
     const [ subject, setSubject ] = useState('');
     const [ week_day, setWeek_day ] = useState('');
     const [ time, setTime ] = useState('');
+    let   [ page, setPage ] = useState(1);
+    const [ limite ] = useState(1);
+    const [ loading, setLoading ] = useState(false);
 
+    const forceUpdate = useForceUpdate();
+  
     async function loadFavoritos(){
     
         try{
@@ -46,58 +48,88 @@ function TeacherList({ route }: any){
             })
 
             setFavorites(favoritedIds);
-
         }
 
         catch(error){
-            console.log('Erro ao carregar os favoritos na página Teacher List: ', error);
+            alert('Erro ao buscar os ids dos favoritos.')
         }
         
     }
 
-    useEffect(() => {
-        loadFavoritos();
-    }, [favoritesTeachers]);
-     
+    useFocusEffect(
+        React.useCallback(() => {
+            loadFavoritos();
+            forceUpdate();
+        }, [])
+    );
+    
+
     function handleToggleFiltersVisible(){
         setIsFiltersVisible(!isFiltersVisible);
     }
 
-    function doNotReturnYourself(resp: any){
-        const users = resp.filter((user: any) => (
-            user.id !== id
-        ))
-        
-        return users;
-    }
-
     async function handleFiltersSubmit(){
-
+        
+        setIsFiltersVisible(false);
+        
         try{
-            loadFavoritos();
-
             const response = await api.get('classes', {
                 params: {
                     subject,
                     week_day,
                     time,
+                    porPag: limite,
+                    currentPag: page,
+                    id
+                },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+
+            setTeachers(response.data);
+
+            setLoading(false);
+            setPage(page + 1);
+        }
+        catch(error){
+            alert('erro no filtro')
+        }
+    }
+
+    async function loadMore(){
+        if(loading){
+            return
+        }
+        
+        setLoading(true);
+
+        try{
+            const response = await api.get('classes', {
+                params: {
+                    subject,
+                    week_day,
+                    time,
+                    porPag: limite,
+                    currentPag: page,
+                    id
                 },
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             })  
 
-            
-            const proffys = doNotReturnYourself(response.data);
-            
-            setIsFiltersVisible(false);
-            setTeachers(proffys);
+            setTeachers([...teachers, ...response.data]);
 
-        }        
-        catch(err){
-            console.log('Deu ruim: ', err);
+            setLoading(false);
+            setPage(page + 1);
         }
+        catch(error){
+            console.log('Deu ruim no loadMore: ', error);
+        }
+        
     }
+
     
 
     return(
@@ -162,16 +194,21 @@ function TeacherList({ route }: any){
             </PageHeader>
 
             <FlatList
+
+                onEndReached={loadMore}
+                onEndReachedThreshold={0.1}
+
                 style={styles.teacherList}
                 contentContainerStyle={{
                     paddingHorizontal: 16,
                     paddingBottom: 16
                 }}
                 data={teachers}
+                extraData={favoritesTeachers}
                 keyExtractor={( item: Teacher) => `${item.id}`}
                 renderItem={ ({ item }) => (
                     <TeacherItem 
-                        key={`${item.id}`}
+                        key={item.id}
                         teacher={item}
                         route={{ id, auth, token }}
                         favorited={favoritesTeachers.includes(item.id)}

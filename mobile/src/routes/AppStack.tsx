@@ -26,8 +26,8 @@ function AppStack(){
                 <Screen name='NewPassword' component={NewPassword}/>
                 <Screen name='TeacherProfile' component={TeacherProfile}/>
                 <Screen name='GiveClasses' component={GiveClasses}/>
-                <Screen name='Study' component={StudyTabs}/>
                 <Screen name='Cadastro' component={Cadastro}/>
+                <Screen name='Study' component={StudyTabs}/>
                 <Screen name='CadastroFinal' component={CadastroFinal}/>
                 <Screen name='CadastroConcluido' component={CadastroConcluido}/>
 
