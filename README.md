@@ -38,7 +38,7 @@ Proffy is an online platform to help students find teachers online.
 
 ## 🔖 Layout
 
-click on links below to see the web and mobile layouts.
+Click on links below to see the web and mobile layouts.
 A [Figma](http://figma.com/) account is necessary tho.
 
 - [Layout Web](https://www.figma.com/file/GHGS126t7WYjnPZdRKChJF/Proffy-Web)
