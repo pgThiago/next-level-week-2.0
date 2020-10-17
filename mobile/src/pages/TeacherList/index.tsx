@@ -9,11 +9,7 @@ import TeacherItem, { Teacher } from '../../components/TeacherItem';
 import { Feather } from '@expo/vector-icons';
 import api from '../../services/api';
 
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-
-import useForceUpdate from 'use-force-update';
-import { ReloadContext } from '../../context';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 function TeacherList({ route }: any){
 
@@ -28,7 +24,6 @@ function TeacherList({ route }: any){
     const [ limite ] = useState(1);
     const [ loading, setLoading ] = useState(false);
 
-    const forceUpdate = useForceUpdate();
   
     async function loadFavoritos(){
     
@@ -59,7 +54,6 @@ function TeacherList({ route }: any){
     useFocusEffect(
         React.useCallback(() => {
             loadFavoritos();
-            forceUpdate();
         }, [])
     );
     

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, SafeAreaView } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
-
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
 
