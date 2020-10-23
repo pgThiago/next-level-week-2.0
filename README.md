@@ -58,8 +58,9 @@ This project is under MIT license. Check the file [LICENSE](LICENSE.md) for more
   ### ✔️ Show teachers schedules.
   ### ✔️ Save favorites teachers on database.
   ### ✔️ Logout.
+  ### ❌ Deploy
 
-- [Proffy challenges 2.0](https://www.notion.so/Vers-o-2-0-do-Happy-c754db7a4d41469e8c2d00fcf75392c4) (in portuguese).
+- [Proffy challenges 2.0](https://www.notion.so/Vers-o-2-0-Proffy-eefca1b981694cd0a895613bc6235970) (in portuguese).
 
 --- 
 Made with ♥ by Rocketseat :wave: [Join us!](https://discordapp.com/invite/gCRAFhc)
