@@ -38,9 +38,9 @@ function Login(){
                 const user = await AsyncStorage.getItem('user');
                 
                 const userAsObject = JSON.parse(`${user}`);
-                const { id, auth, token } = userAsObject;
+                const { id, auth, token, toggleCheckBox } = userAsObject;
 
-                if(auth){
+                if(auth && toggleCheckBox){
                     navigate('Landing', { id, auth, token });
                 }
                 else{
@@ -71,7 +71,8 @@ function Login(){
                 token,
                 auth,
                 email,
-                password: senha
+                password: senha,
+                toggleCheckBox
             }
 
             const userDatasToNotKeepLogged = {

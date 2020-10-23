@@ -23,9 +23,8 @@ function Login(){
             const user = localStorage.getItem('user');
             
             const userAsObject = JSON.parse(`${user}`);
-            const { auth } = userAsObject;
-            console.log(userAsObject.id);
-            if(auth){
+            const { auth, check } = userAsObject;
+            if(auth && check){
                 history.push('/landing')
             }
             else{
@@ -35,7 +34,7 @@ function Login(){
         catch(error){
             history.push('/');
         }
-    }, []);
+    }, [history]);
 
 
     async function handleSubmit(event: any){
@@ -57,7 +56,8 @@ function Login(){
                 token,
                 auth,
                 email,
-                password: senha
+                password: senha,
+                check
             }
 
             const userDatasToNotKeepLogged = {
@@ -66,11 +66,13 @@ function Login(){
                 auth,
             }
 
+            console.log('check: ', check);
+
             if(check && auth){
                 localStorage.setItem('user', JSON.stringify(userDatasToKeepLogged));
                 history.push('/landing');
             }
-            else if(!check && auth){
+            else if(check === false && auth){
                 localStorage.setItem('user', JSON.stringify(userDatasToNotKeepLogged));
                 history.push('/landing');
             }

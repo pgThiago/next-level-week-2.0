@@ -31,7 +31,6 @@ function Landing(){
             const userString = `${user}`
             const userInformation = JSON.parse(userString);
             const { token, auth } = userInformation;
-            console.log(auth);
             if(!auth)
                 history.push('/');
             
@@ -44,7 +43,7 @@ function Landing(){
             history.push('/');
         }
         
-    }, []);
+    }, [history]);
 
     return (
         <div id="page-landing">

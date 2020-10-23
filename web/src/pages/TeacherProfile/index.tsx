@@ -57,7 +57,7 @@ function TeacherProfile() {
         catch(error){
             history.push('/');
         }
-    }, []);
+    }, [history]);
 
     function addNewScheduleItem(){
         setScheduleItems([
@@ -116,7 +116,7 @@ function TeacherProfile() {
                 const user = localStorage.getItem('user');
                 const userString = `${user}`
                 const userInformation = JSON.parse(userString);
-                const { id, token, auth } = userInformation;
+                const { id, token } = userInformation;
                 if(!token){
                     alert('Você precisa se cadastrar primeiro');
                     history.push('/give-classes');
@@ -208,7 +208,7 @@ function TeacherProfile() {
             }
         }
         getProffyDatas();
-    }, [history]);
+    });
 
     return (
         <div id="page-teacher-profile" className="container" >
