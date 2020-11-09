@@ -60,7 +60,7 @@ A [Figma](http://figma.com/) account is necessary tho.
 ## :memo: License
 
 This project is under MIT license. Check the file [LICENSE](LICENSE.md) for more details.
+
 ---
 
---- 
 Made with ♥ by Rocketseat :wave: [Join us!](https://discordapp.com/invite/gCRAFhc)
