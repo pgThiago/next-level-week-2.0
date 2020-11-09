@@ -4,6 +4,19 @@
     <img alt="Proffy" title="Proffy" src=".github/logo.svg" />
 </h1>
 
+## 🧠 2.0 version challenges i did:
+  ### ✔️ User authentication.
+  ### ✔️ Password recovery.
+  ### ✔️ Teacher profile.
+  ### ✔️ Splash Screen.
+  ### ✔️ Pagination while listing teachers.
+  ### ✔️ Show teachers schedules.
+  ### ✔️ Save favorites teachers on database.
+  ### ✔️ Logout.
+  ### ❌ Deploy.
+
+- [Proffy challenges 2.0](https://www.notion.so/Vers-o-2-0-Proffy-eefca1b981694cd0a895613bc6235970) (in portuguese).
+
 <p align="center">
   <a href="#-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-project">Project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -48,19 +61,6 @@ A [Figma](http://figma.com/) account is necessary tho.
 
 This project is under MIT license. Check the file [LICENSE](LICENSE.md) for more details.
 ---
-
-## 🧠 2.0 version challenges i did:
-  ### ✔️ User authentication.
-  ### ✔️ Password recovery.
-  ### ✔️ Teacher profile.
-  ### ✔️ Splash Screen.
-  ### ✔️ Pagination while listing teachers.
-  ### ✔️ Show teachers schedules.
-  ### ✔️ Save favorites teachers on database.
-  ### ✔️ Logout.
-  ### ❌ Deploy
-
-- [Proffy challenges 2.0](https://www.notion.so/Vers-o-2-0-Proffy-eefca1b981694cd0a895613bc6235970) (in portuguese).
 
 --- 
 Made with ♥ by Rocketseat :wave: [Join us!](https://discordapp.com/invite/gCRAFhc)
