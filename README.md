@@ -15,8 +15,6 @@
   ### ✔️ Logout.
   ### ❌ Deploy.
 
-- [Proffy challenges 2.0](https://www.notion.so/Vers-o-2-0-Proffy-eefca1b981694cd0a895613bc6235970) (in portuguese).
-
 <p align="center">
   <a href="#-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-project">Project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -57,6 +55,8 @@ A [Figma](http://figma.com/) account is necessary tho.
 - [Layout Web](https://www.figma.com/file/GHGS126t7WYjnPZdRKChJF/Proffy-Web)
 - [Layout Mobile](https://www.figma.com/file/e33KvgUpFdunXxJjHnK7CG/Proffy-Mobile)
 
+## 🧠 Challenges:
+- [Proffy challenges 2.0](https://www.notion.so/Vers-o-2-0-Proffy-eefca1b981694cd0a895613bc6235970) (in portuguese).
 ## :memo: License
 
 This project is under MIT license. Check the file [LICENSE](LICENSE.md) for more details.
