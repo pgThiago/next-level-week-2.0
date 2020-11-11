@@ -4,7 +4,7 @@
     <img alt="Proffy" title="Proffy" src=".github/logo.svg" />
 </h1>
 
-## 🧠 2.0 version challenges i did:
+## 🧠 2.0 version | challenges I've accomplished:
   ### ✔️ User authentication.
   ### ✔️ Password recovery.
   ### ✔️ Teacher profile.
