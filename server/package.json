@@ -26,6 +26,6 @@
     "knex-paginate": "^1.2.3",
     "nodemailer": "^6.4.11",
     "nodemailer-express-handlebars": "^4.0.0",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.3"
   }
 }
