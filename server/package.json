@@ -22,7 +22,7 @@
     "bcrypt": "^5.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.21.2",
+    "knex": "^2.4.0",
     "knex-paginate": "^1.2.3",
     "nodemailer": "^6.4.11",
     "nodemailer-express-handlebars": "^4.0.0",
